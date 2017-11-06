@@ -1,0 +1,29 @@
+* setxkbmap
+
+setxkbmap generates high-level keyboard map description and feeds it
+to map compiler (xkbcomp) which compiles it into .xkm file and
+installs into X.
+
+# With -print, print keymap description. Keymap components are taken
+# from current system settings.
+setxkbmap -print
+#=> xkb_keymap {
+#=> 	xkb_keycodes  { include "evdev+aliases(qwerty)"	};
+#=> 	xkb_types     { include "complete"	};
+#=> 	xkb_compat    { include "complete"	};
+#=> 	xkb_symbols   { include "pc+us(dvorak)+us:2+inet(evdev)"	};
+#=> 	xkb_geometry  { include "pc(pc105)"	};
+#=> };
+
+* xev
+
+xev can be used to get keycodes. It creates a separate window and logs
+specified events that happen to it.
+
+xev -event keyboard
+#=> KeyPress event, serial 28, synthetic NO, window 0x3e00001,
+#=>     state 0x10, keycode 105 (keysym 0xffe4, Control_R), same_screen YES,
+
+* xkbcomp
+
+xkbcomp $DISPLAY current.xkb # store current keymap description

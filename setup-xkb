@@ -1,0 +1,3 @@
+#!/bin/bash
+
+setxkbmap -keycodes evdev -types "complete+my" -symbols "pc+us(dvorak)+ru-diktor-us-dvorak:2+inet(evdev)+my" -print | xkbcomp -I$HOME/.xkb - $DISPLAY

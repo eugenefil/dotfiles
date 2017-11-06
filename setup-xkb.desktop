@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=setup-xkb
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=setup xkb
+Name=setup xkb
+Comment[en_US]=
+Comment=
