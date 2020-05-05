@@ -15,4 +15,4 @@
 sed -unr 's/^\s+key\s<.+>\s\{\[(.+),\s(.+)\]\};$/XK_\1\nXK_\2/p' |
     xargs -i grep '#define\s{}\s' /usr/include/X11/keysymdef.h |
     sed -unr 's_^.+/\* U\+(....).+$_\1_p' |
-    xargs -i python2 -c "print u'\u{}'.encode('utf-8')"
+    xargs -i python3 -c "print('\u{}')"
