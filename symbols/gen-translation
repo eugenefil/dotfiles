@@ -1,0 +1,11 @@
+#!/bin/bash
+base=translate.el
+targ="$HOME/.emacs.d/$base"
+echo "generating ru-diktor => us-dvorak translation into $targ"
+./emacs-translate-seqs.sh ru-diktor us-dvorak >"$targ"
+cat <<EOF
+paste below command into your init.el:
+
+  (load-file (concat user-emacs-directory "$base"))
+
+EOF
