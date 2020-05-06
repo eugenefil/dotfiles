@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+dir=~/.git
+if [ -d $dir.off ]; then
+    mv $dir.off $dir
+    echo ~ version control is on
+else
+    mv $dir $dir.off
+    echo ~ version control is off
+fi

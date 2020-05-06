@@ -1,0 +1,9 @@
+# ~/.inputrc: readline initialization file.
+
+set bell-style none
+
+"\er": reverse-search-history
+"\ep": previous-history
+"\en": next-history
+"\C-w": kill-region
+"\ew": copy-region-as-kill

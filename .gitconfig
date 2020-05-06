@@ -1,0 +1,11 @@
+[user]
+	email = fil.eugene@gmail.com
+	name = eugenefil
+[core]
+	editor = vim
+	pager = cat
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	tip = log -n1

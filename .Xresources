@@ -1,0 +1,5 @@
+! for readline \e-sequences to work with Alt, Meta
+XTerm*Background: black
+XTerm*Foreground: white
+xterm*metaSendsEscape: true
+xterm*faceName: DejaVu Sans Mono:size=12

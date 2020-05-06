@@ -1,0 +1,255 @@
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+(scroll-bar-mode 0)
+(setq inhibit-splash-screen t)
+
+(column-number-mode 1)
+(transient-mark-mode 0)
+(setq enable-recursive-minibuffers t)
+(setq history-delete-duplicates t)
+(setq kill-whole-line t)
+(setq save-interprogram-paste-before-kill t)
+(setq scroll-preserve-screen-position t)
+(setq read-quoted-char-radix 16)
+(setq isearch-allow-scroll t)
+
+;; Completion.
+(add-to-list 'completion-styles 'substring t)
+(setq read-file-name-completion-ignore-case t)
+(setq read-buffer-completion-ignore-case t)
+(setq completion-cycle-threshold 5)
+(icomplete-mode)
+
+(load-theme 'zenburn t)
+(setq visible-bell 1)
+(setq ediff-split-window-function 'split-window-horizontally)
+
+; open man page in current window
+(setq Man-notify-method 'pushy)
+; select window of help page
+(setq help-window-select t)
+
+;; dired
+;; use 'a' to enter subdirs instead of 'enter', use '^' to move up
+(put 'dired-find-alternate-file 'disabled nil)
+(add-hook 'dired-mode-hook
+ (lambda ()
+  (define-key dired-mode-map (kbd "^")
+    (lambda () (interactive) (find-alternate-file "..")))
+  ; was dired-up-directory
+  ))
+
+(setq shell-pushd-regexp "pu")
+(setq shell-popd-regexp "po")
+
+;; ;; functions for remote python execution via tramp
+;; ;;;###tramp-autoload
+;; (defun tramp-make-tramp-temp-name (vec)
+;;   "Generate a temporary file name on the remote host identified
+;; by VEC."
+;;   (let ((prefix (expand-file-name
+;; 		 tramp-temp-name-prefix (tramp-get-remote-tmpdir vec)))
+;; 	result)
+;;     (while (not result)
+;;       ;; `make-temp-file' would be the natural choice for
+;;       ;; implementation.  But it calls `write-region' internally,
+;;       ;; which also needs a temporary file - we would end in an
+;;       ;; infinite loop.
+;;       (setq result (make-temp-name prefix))
+;;       (if (file-exists-p result)
+;; 	  (setq result nil)))
+;;     result))
+
+;; (defun py--execute-buffer-finally (strg which-shell proc procbuf origline)
+;;   (let* ((tempfile (tramp-make-tramp-temp-name
+;; 		    (tramp-dissect-file-name default-directory)))
+;; 	 (localname (tramp-file-name-localname
+;; 		     (tramp-dissect-file-name tempfile)))
+;;          (tempbuf (get-buffer-create tempfile))
+;; 	 erg)
+;;     (setq py-tempfile tempfile)
+;;     (with-current-buffer tempbuf
+;;       (insert strg)
+;;       (write-file py-tempfile))
+;;     (kill-buffer tempbuf)
+;;     (unwind-protect
+;; 	(setq erg (py--execute-file-base proc localname nil procbuf origline)))
+;;     erg))
+
+;; w3m
+;; (require 'w3m-load)
+;; (setq w3m-default-display-inline-images t)
+;; (setq w3m-session-load-last-sessions t)
+
+;; slime
+;; (require 'slime-autoloads)
+;; (setq inferior-lisp-program "/usr/bin/clisp")
+
+;; tramp
+(setq tramp-default-method "ssh")
+;; don't create .tramp_history files on remote machines
+(setq tramp-histfile-override "/dev/null")
+
+;; org
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ediff-fine-diff-B ((t (:background "cyan"))))
+ '(org-level-5 ((t (:inherit outline-5 :foreground "hot pink")))))
+
+(put 'erase-buffer 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'scroll-left 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'set-goal-column 'disabled nil)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages (quote (elpy zenburn-theme))))
+
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-11"))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+
+;; duplicate common keys to reduce errors
+(global-set-key (kbd "C-x b") 'switch-to-buffer)
+(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
+(global-set-key (kbd "C-x f") 'find-file)
+(global-set-key (kbd "C-x C-f") 'find-file)
+;; also don't query buffer, just kill current
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+
+
+;; load combo translations from russian layout to english
+(load-file (concat user-emacs-directory "translate.el"))
+
+;; remap C-u to C-x
+(define-key key-translation-map (kbd "C-u") (kbd "C-x"))
+(define-key key-translation-map (kbd "C-S-u") (kbd "C-x"))
+(define-key key-translation-map (kbd "C-о") (kbd "C-x"))
+(define-key key-translation-map (kbd "C-О") (kbd "C-x"))
+;; remap C-. to C-u
+(define-key key-translation-map (kbd "C-.") (kbd "C-u"))
+;; no C-S-.
+(define-key key-translation-map (kbd "C-я") (kbd "C-u"))
+(define-key key-translation-map (kbd "C-Я") (kbd "C-u"))
+;; remap C-x to C-h
+(define-key key-translation-map (kbd "C-x") (kbd "C-h"))
+(define-key key-translation-map (kbd "C-S-x") (kbd "C-h"))
+(define-key key-translation-map (kbd "C-ю") (kbd "C-h"))
+(define-key key-translation-map (kbd "C-Ю") (kbd "C-h"))
+;; remap C-h to DEL
+(define-key key-translation-map (kbd "C-h") (kbd "DEL"))
+(define-key key-translation-map (kbd "C-S-h") (kbd "DEL"))
+(define-key key-translation-map (kbd "C-н") (kbd "DEL"))
+(define-key key-translation-map (kbd "C-Н") (kbd "DEL"))
+;; remap M-h to M-DEL
+(define-key key-translation-map (kbd "M-h") (kbd "M-DEL"))
+(define-key key-translation-map (kbd "M-H") (kbd "M-DEL"))
+(define-key key-translation-map (kbd "M-н") (kbd "M-DEL"))
+(define-key key-translation-map (kbd "M-Н") (kbd "M-DEL"))
+
+
+(require 'package) ; w/out this package-archives is void
+;; ELPA is an official gnu repo and a standard interface for other
+;; emacs repos. It is in `package-archives' by default. ELPA is
+;; restricted to only free software and requires signing FSF
+;; Copyright. Thus ELPA contains the fewest packages of all repos.
+;;
+;; Marmalade does not require FSF Copyright. It is served by elnode
+;; web server written by Nic Ferrier.
+;;
+;; MELPA is not restricted to free software. Packages are not uploaded
+;; but built automatically from upstream with recipes. There are
+;; stable versions (melpa-stable) and bleeding edge (melpa).
+(add-to-list 'package-archives
+	     '("marmalade" . "https://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+	     '("melpa-stable" . "https://stable.melpa.org/packages/"))
+
+
+;;; Backups
+;; These settings are primarily intended for editing config
+;; files. They are edited rarely and not under vc, so backups are
+;; welcome.
+
+;; don't break hard links when creating backup, otherwise they point
+;; to backup, not the original file
+(setq backup-by-copying-when-linked t)
+;; numbered backups allow many backups instead of just one with simple
+;; backups
+(setq version-control t)
+;; store all backups under emacs dir to avoid littering
+(add-to-list 'backup-directory-alist
+	     `("." . ,(concat user-emacs-directory "backup")))
+;; Keep one oldest backup (the very original) and nine
+;; newest. Silently delete excessive.
+(setq kept-old-versions 1
+      kept-new-versions 9
+      delete-old-versions t)
+
+(when (package-installed-p 'mu4e)
+  (require 'mu4e)
+  (setq mail-user-agent 'mu4e-user-agent)
+  (setq user-mail-address "e.filimonov@philipp-kld.ru"
+	user-full-name "Евгений Филимонов")
+  ;; kill compose buffer after sending message
+  (setq message-kill-buffer-on-exit t)
+  (setq
+   mu4e-headers-fields '((:human-date . 12) (:flags . 6) (:from . 22) (:subject))
+   mu4e-attachment-dir  "~/dl"
+   mu4e-view-show-images t ; show images in messages
+   mu4e-get-mail-command "getmail -r wph"
+   mu4e-update-interval 600
+   ;; show duplicates, otherwise it's not clear why mu4e shows less
+   ;; messages than mu-find
+   mu4e-headers-skip-duplicates nil
+   ;; don't show related and threads, keep things simple
+   mu4e-headers-include-related nil
+   mu4e-headers-show-threads nil)
+  (setq send-mail-function 'smtpmail-send-it
+	smtpmail-smtp-server "10.0.0.1"))
+
+
+(defun winselector-winlist ()
+  (sort (window-list-1)
+	(lambda (a b)
+	  (let ((arect (window-edges a))
+		(brect (window-edges b)))
+	    (or (< (car arect) (car brect))
+		(and (= (car arect) (car brect))
+		     (< (cadr arect) (cadr brect))))))))
+
+;; bind keys for window selection
+(dotimes (i 7)
+  (let* ((k (1+ i))
+	 (name (intern (format "winselector-select-%d" k))))
+    (eval `(defun ,name ()
+	     ,(format "Select window with number %d.
+Windows are numbered left to right, then top to bottom.
+Left-most upper window is number 1." k)
+	     (interactive)
+	     (select-window (nth ,i (winselector-winlist)))))
+    (global-set-key (kbd (format "M-%d" k)) name)))
+
+
+(defun startup ()
+  (split-window-right)
+  (shell)
+  (rename-buffer "2")
+  (shell)
+  (rename-buffer "1"))
+(startup)
