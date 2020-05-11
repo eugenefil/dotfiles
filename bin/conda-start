@@ -1,0 +1,5 @@
+# this script must be sourced
+eval "$(/home/fil/miniconda3/bin/conda shell.bash hook)"
+if [ "$1" ]; then
+  conda activate "$1"
+fi
