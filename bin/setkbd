@@ -1,0 +1,3 @@
+#!/bin/bash
+~/.xkb/setup-xkb
+xset r rate 135 60
