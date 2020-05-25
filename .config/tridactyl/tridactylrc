@@ -1,0 +1,5 @@
+set hintdelay 100
+set hintnames short
+" don't enter visual mode after search
+set visualenterauto false
+set searchurls.np https://numpy.org/doc/stable/search.html?q=%s

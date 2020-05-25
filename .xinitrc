@@ -13,7 +13,8 @@ fi
 
 [[ -f ~/.Xresources ]] && xrdb -l ~/.Xresources
 ~/.xkb/setup-xkb
-xset r rate 130 150
+xset r rate 135 60
 xset dpms 2400 2400 2400
 ~/bin/mice l
+numlockx
 exec openbox

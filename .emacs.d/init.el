@@ -96,7 +96,15 @@
 ;; don't create .tramp_history files on remote machines
 (setq tramp-histfile-override "/dev/null")
 
-;; org
+;;; org
+;; org-mode-hook is defined only after org-mode was loaded
+(eval-after-load "org"
+  '(progn
+     (add-to-list 'org-mode-hook 'toggle-truncate-lines t)
+     (setq org-todo-keywords
+	   '((sequence "TODO" "|" "DONE" "DROP")))
+     (setq org-todo-keyword-faces '(("DROP" . "grey")))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
