@@ -26,7 +26,7 @@
 (setq completion-cycle-threshold 5)
 (icomplete-mode)
 
-(load-theme 'zenburn t)
+(load-theme 'zenburn-my t)
 (setq visible-bell 1)
 (setq ediff-split-window-function 'split-window-horizontally)
 
@@ -100,7 +100,8 @@
 ;; org-mode-hook is defined only after org-mode was loaded
 (eval-after-load "org"
   '(progn
-     (add-to-list 'org-mode-hook 'toggle-truncate-lines t)
+     (add-hook 'org-mode-hook 'toggle-truncate-lines t)
+     (add-hook 'org-agenda-mode-hook 'toggle-truncate-lines t)
      (setq org-todo-keywords
 	   '((sequence "TODO" "|" "DONE" "DROP")))
      (setq org-todo-keyword-faces '(("DROP" . "grey")))))
@@ -120,12 +121,66 @@
 (put 'downcase-region 'disabled nil)
 (put 'set-goal-column 'disabled nil)
 
+(projectile-mode)
+
+(require 'rcirc)
+(setq rcirc-default-nick "eugenefil")
+;; (setq rcirc-server-alist
+;;       '(("irc.freenode.net"
+;; 	 :channels ("#minetest" "#minetest-dev" "#minetest-hub"))))
+
+(require 'eglot)
+;; shadow ccls w/ clangd for c and c++ modes
+(add-to-list 'eglot-server-programs '((c++-mode c-mode) . ("clangd")))
+(add-hook 'c++-mode-hook 'eglot-ensure)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (elpy zenburn-theme))))
+ '(ansi-color-names-vector
+   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
+ '(c-default-style
+   '((c-mode . "linux")
+     (c++-mode . "linux")
+     (java-mode . "java")
+     (awk-mode . "awk")
+     (other . "gnu")))
+ '(company-quickhelp-color-background "#4F4F4F")
+ '(company-quickhelp-color-foreground "#DCDCCC")
+ '(custom-enabled-themes '(zenburn-my))
+ '(custom-safe-themes
+   '("8dc48a77bf1b4c73b6ecadc2326913cae5e68782b2710f0ca48e291d06bd20a3" "da8bd06ec77719822d8217e219aa686699118e00b3337dab9fa5ea288f327389" "86bcbef8618aec51569bca61688d697a63c9c96c597375ea97adbde6e0374793" "84890723510d225c45aaff941a7e201606a48b973f0121cb9bcb0b9399be8cba" default))
+ '(fci-rule-color "#383838")
+ '(lua-indent-level 8)
+ '(nrepl-message-colors
+   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
+ '(org-agenda-window-setup 'other-window)
+ '(package-selected-packages
+   '(projectile eglot lua-mode cython-mode markdown-mode elpy zenburn-theme))
+ '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   '((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3")))
+ '(vc-annotate-very-old-color "#DC8CC3"))
 
 (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-11"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -183,10 +238,12 @@
 ;; MELPA is not restricted to free software. Packages are not uploaded
 ;; but built automatically from upstream with recipes. There are
 ;; stable versions (melpa-stable) and bleeding edge (melpa).
-(add-to-list 'package-archives
-	     '("marmalade" . "https://marmalade-repo.org/packages/"))
+;; (add-to-list 'package-archives
+;; 	     '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
 	     '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
 
 
 ;;; Backups
