@@ -3,13 +3,15 @@
 
 # don't put duplicate lines in history
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-
+export HISTFILESIZE=10000 HISTSIZE=10000
 export EDITOR=vim
 
 # add path to my bin/ to PATH
 PATH=~/bin:$PATH
 # add path to executable gems to PATH
 which ruby &>/dev/null && PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+
+shopt -s globstar autocd
 
 alias l='ls -al --color=auto'
 alias l1='ls -1 --color=auto'
@@ -26,6 +28,6 @@ alias rmrf='rm -rf'
 mdcd() { mkdir "$@" && { for dir; do :; done; cd "$dir"; } }
 
 playalarm() { local n; n="${1:-1}"; while ((n--)); do aplay -q ~/alarm.wav; sleep 1s; done; }
-loopalarm() { while true; do playalarm 10; sleep 1m; done; }
-alarm() { ts=`date -d "$1" +%s`; while [ `date +%s` -lt $ts ]; do sleep 1m; done; loopalarm; }
-countdown() { sleep "$@" && loopalarm; }
+loopalarm() { local n; n="${1:-1000}"; while ((n--)); do playalarm 5; sleep 1m; done; }
+alarm() { ts=`date -d "$1" +%s`; while [ `date +%s` -lt $ts ]; do sleep 1m; done; loopalarm 5; }
+countdown() { sleep "$@" && loopalarm 5; }
