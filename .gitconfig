@@ -2,10 +2,12 @@
 	email = fil.eugene@gmail.com
 	name = eugenefil
 [core]
-	editor = vim
+	editor = emacs
 	pager = cat
 [alias]
 	st = status
 	ci = commit
 	co = checkout
 	tip = log -n1
+[color]
+	ui = always
