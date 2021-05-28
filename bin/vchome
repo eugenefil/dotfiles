@@ -6,6 +6,8 @@ dir=~/.git
 if [ -d $dir.off ]; then
     mv $dir.off $dir
     echo ~ version control is on
+    echo !!! BE SURE TO CHECK OUT CORRECT BRANCH !!!
+    git branch
 else
     mv $dir $dir.off
     echo ~ version control is off
