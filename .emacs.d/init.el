@@ -104,7 +104,8 @@
      (add-hook 'org-agenda-mode-hook 'toggle-truncate-lines t)
      (setq org-todo-keywords
 	   '((sequence "TODO" "|" "DONE" "DROP")))
-     (setq org-todo-keyword-faces '(("DROP" . "grey")))))
+     (setq org-todo-keyword-faces '(("DROP" . "grey")))
+     (setq org-adapt-indentation nil)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -157,6 +158,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(org-agenda-window-setup 'other-window)
+ '(org-startup-folded 'content)
  '(package-selected-packages
    '(projectile eglot lua-mode cython-mode markdown-mode elpy zenburn-theme))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
