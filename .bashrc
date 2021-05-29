@@ -4,7 +4,9 @@
 # don't put duplicate lines in history
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTFILESIZE=10000 HISTSIZE=10000
+
 export EDITOR=vim
+PS1='\$ '
 
 # add path to my bin/ to PATH
 PATH=~/bin:$PATH
