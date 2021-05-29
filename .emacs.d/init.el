@@ -4,6 +4,26 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+(require 'package) ; w/out this package-archives is void
+;; ELPA is an official gnu repo and a standard interface for other
+;; emacs repos. It is in `package-archives' by default. ELPA is
+;; restricted to only free software and requires signing FSF
+;; Copyright. Thus ELPA contains the fewest packages of all repos.
+;;
+;; Marmalade does not require FSF Copyright. It is served by elnode
+;; web server written by Nic Ferrier.
+;;
+;; MELPA is not restricted to free software. Packages are not uploaded
+;; but built automatically from upstream with recipes. There are
+;; stable versions (melpa-stable) and bleeding edge (melpa).
+;; (add-to-list 'package-archives
+;; 	     '("marmalade" . "https://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+	     '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
+
+
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
@@ -225,26 +245,6 @@
 (define-key key-translation-map (kbd "M-H") (kbd "M-DEL"))
 (define-key key-translation-map (kbd "M-н") (kbd "M-DEL"))
 (define-key key-translation-map (kbd "M-Н") (kbd "M-DEL"))
-
-
-(require 'package) ; w/out this package-archives is void
-;; ELPA is an official gnu repo and a standard interface for other
-;; emacs repos. It is in `package-archives' by default. ELPA is
-;; restricted to only free software and requires signing FSF
-;; Copyright. Thus ELPA contains the fewest packages of all repos.
-;;
-;; Marmalade does not require FSF Copyright. It is served by elnode
-;; web server written by Nic Ferrier.
-;;
-;; MELPA is not restricted to free software. Packages are not uploaded
-;; but built automatically from upstream with recipes. There are
-;; stable versions (melpa-stable) and bleeding edge (melpa).
-;; (add-to-list 'package-archives
-;; 	     '("marmalade" . "https://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-	     '("melpa-stable" . "https://stable.melpa.org/packages/"))
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
 
 
 ;;; Backups
