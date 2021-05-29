@@ -1,3 +1,9 @@
 #!/bin/bash
-
-setxkbmap -keycodes evdev -types "complete+my" -symbols "pc+us(dvorak)+ru-diktor-us-dvorak:2+inet(evdev)+my" -print | xkbcomp -I$HOME/.xkb - $DISPLAY
+set -euo pipefail
+# check if we have laptop keyboard
+xid=$(xinput --list | sed -rn 's/.*\sAT Translated Set 2 keyboard\s+id=([0-9]+).*/\1/p')
+extra=
+if ! [ "$xid" ]; then
+    extra=+my-pc # add extra tweaks for pc keyboard
+fi
+setxkbmap -keycodes evdev -types "complete+my" -symbols "pc+us(dvorak)+ru-diktor-us-dvorak:2+inet(evdev)+my$extra" -print | xkbcomp -I$HOME/.xkb - $DISPLAY

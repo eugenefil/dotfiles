@@ -1,0 +1,9 @@
+xkb_symbols "my-pc" {
+    // on pc keyboard swap Menu and right Control, so both Controls
+    // are third from Space
+    key <MENU> {[Control_R]};
+    key <RCTL> {[Menu]};
+
+    // to spare pinky use left Win as Enter to press with edge of palm
+    key <RWIN> {[Return]};
+};

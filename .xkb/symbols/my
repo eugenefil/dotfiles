@@ -1,11 +1,8 @@
 xkb_symbols "my" {
     // switch layouts (groups in xkb parlance) with Caps Lock
     key <CAPS> {[ISO_Next_Group]};
-
-    key <RWIN> {[Return]};
-    key <MENU> {[Control_R]};
-    // move Caps Lock to right Control
-    key <RCTL> {[Caps_Lock]};
+    // move Caps Lock to left Win
+    key <LWIN> {[Caps_Lock]};
 
     // Below are emacs keybindings for general X. Those were useful
     // for Conkeror, but Conkeror is dead. Leave them commented still,
