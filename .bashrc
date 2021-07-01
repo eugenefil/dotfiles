@@ -8,8 +8,6 @@ export HISTFILESIZE=10000 HISTSIZE=10000
 export EDITOR=vim
 PS1='\$ '
 
-# add path to my bin/ to PATH
-PATH=~/bin:$PATH
 # add path to executable gems to PATH
 which ruby &>/dev/null && PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
