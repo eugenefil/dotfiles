@@ -1,0 +1,7 @@
+#!/bin/sh
+# Surprisingly(?) etags doesn't support shell syntax. This script adds
+# that support via simple regex.
+#
+# Note, that etags uses emacs-style regex, where \(\) are used to
+# group and () are normal chars.
+etags -l none -r '/\([a-z_][a-z_0-9]*\)()/\1/i' "$@"
