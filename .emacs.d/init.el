@@ -67,6 +67,7 @@
 
 (setq shell-pushd-regexp "pu")
 (setq shell-popd-regexp "po")
+(setq shell-input-autoexpand nil)
 
 ;; ;; functions for remote python execution via tramp
 ;; ;;;###tramp-autoload

@@ -1,6 +1,8 @@
 # if not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
+set +H
+
 # don't put duplicate lines in history
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTFILESIZE=10000 HISTSIZE=10000
