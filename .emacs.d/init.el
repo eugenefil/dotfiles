@@ -144,6 +144,7 @@
 (put 'set-goal-column 'disabled nil)
 
 (projectile-mode)
+(elpy-enable)
 
 (require 'rcirc)
 (setq rcirc-default-nick "eugenefil")
@@ -180,7 +181,7 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(org-agenda-window-setup 'other-window)
  '(org-startup-folded 'content)
- '(package-selected-packages '(projectile eglot lua-mode cython-mode markdown-mode elpy))
+ '(package-selected-packages '(elpy projectile eglot lua-mode cython-mode markdown-mode))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
