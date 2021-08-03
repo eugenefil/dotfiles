@@ -1,0 +1,6 @@
+#!/bin/sh
+# usage: $0 [config.bin]
+# if no file specified, read from stdin
+[ "$1" != "" ] && exec 0<"$1"
+dd bs=1 skip=144 status=none|openssl enc -d -des-ecb -nopad -K 478DA50BF9E3D2CF|pigz|gzip -dc
+
