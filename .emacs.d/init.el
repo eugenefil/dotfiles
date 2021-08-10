@@ -55,6 +55,11 @@
 ; select window of help page
 (setq help-window-select t)
 
+;; make ascii selection overlay brighter
+(add-hook 'hexl-mode-hook
+	  (lambda ()
+	    (overlay-put hexl-ascii-overlay 'face 'holiday)))
+
 ;; dired
 ;; use 'a' to enter subdirs instead of 'enter', use '^' to move up
 (put 'dired-find-alternate-file 'disabled nil)
