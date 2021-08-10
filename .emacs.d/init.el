@@ -192,6 +192,7 @@
  '(org-startup-folded 'content)
  '(package-selected-packages '(elpy projectile eglot lua-mode cython-mode markdown-mode))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
+ '(sh-basic-offset 8)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    '((20 . "#BC8383")
