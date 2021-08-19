@@ -1,9 +1,19 @@
-#!/bin/bash
-set -euo pipefail
-# check if we have laptop keyboard
-xid=$(xinput --list | sed -rn 's/.*\sAT Translated Set 2 keyboard\s+id=([0-9]+).*/\1/p')
-extra=
-if ! [ "$xid" ]; then
-    extra=+my-pc # add extra tweaks for pc keyboard
-fi
-setxkbmap -keycodes evdev -types "complete+my" -symbols "pc+us(dvorak)+ru-diktor-us-dvorak:2+inet(evdev)+my$extra" -print | xkbcomp -I$HOME/.xkb - $DISPLAY
+#!/bin/sh
+set -eu
+
+keyboards="\
+none AT Translated Set 2 keyboard
+my-pc SEM USB Keyboard"
+
+echo "$keyboards" |
+while IFS=' ' read opts name; do
+	xid=$(xinput --list | sed -rn 's/.*\s'"$name"'\s+id=([0-9]+).*/\1/p')
+	[ -n "$xid" ] || continue
+	echo "Found $name at id $xid" >&2
+	if [ "$opts" = none ]; then
+		opts=
+	else
+		opts="+$opts"
+	fi
+	setxkbmap -keycodes evdev -types "complete+my" -symbols "pc+us(dvorak)+ru-diktor-us-dvorak:2+inet(evdev)+my$opts" -print | xkbcomp -I$HOME/.xkb -i $xid - $DISPLAY
+done
