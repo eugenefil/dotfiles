@@ -166,6 +166,11 @@
 (add-to-list 'eglot-server-programs '((c++-mode c-mode) . ("clangd")))
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
+;; make tag search case-sensitive in programming modes, otherwise
+;; xref-find-definitions for e.g. PAGE_OFFSET also finds definitions
+;; like `struct page_offset'
+(add-hook 'prog-mode-hook (lambda () (setq tags-case-fold-search nil)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
