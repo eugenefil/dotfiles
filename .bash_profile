@@ -2,12 +2,12 @@
 
 [ -z "$TMUX" ] && {
     PATH=~/bin:~/.local/bin:$PATH
-}
 
-[ -d "$HOME/.bash_profile.d" ] && {
-    for f in "$HOME/.bash_profile.d"/*; do
-	[ -x "$f" ] && "$f"
-    done
+    [ -d "$HOME/.bash_profile.d" ] && {
+        for f in "$HOME/.bash_profile.d"/*; do
+            [ -x "$f" ] && "$f"
+        done
+    }
 }
 
 if [ -z "$SSH_CLIENT" ]; then
