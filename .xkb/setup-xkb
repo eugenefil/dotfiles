@@ -3,7 +3,8 @@ set -eu
 
 keyboards="\
 none AT Translated Set 2 keyboard
-my-pc SEM USB Keyboard"
+my-pc SEM USB Keyboard
+my-pc DaKai 2.4G RX"
 
 echo "$keyboards" |
 while IFS=' ' read opts name; do
