@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+level=$1
+min=5
+max=100
+[ $level -ge $min ] || level=$min
+[ $level -le $max ] || level=$max
+phys_max=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+echo $((phys_max * level / max)) > /sys/class/backlight/intel_backlight/brightness
