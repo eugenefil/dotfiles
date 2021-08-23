@@ -16,4 +16,4 @@ xset dpms 2400 2400 2400
 ~/bin/setkbd
 ~/bin/chmouse l
 numlockx
-exec openbox
+exec openbox-session
