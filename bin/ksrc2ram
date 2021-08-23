@@ -1,0 +1,74 @@
+#!/bin/sh
+set -eu
+
+me="${0##*/}"
+
+usage() {
+	echo "\
+usage: $me [options] src dest
+Create filesystem in RAM, mount it at dest, copy there kernel
+sources found in src and create TAGS file.
+
+  -a, --arch=arch  from arches inside arch/ copy only arch/<arch>
+  -h, --help       display this help and exit
+"
+	exit 1
+}
+
+die() {
+	echo "$me: $1" >&2
+	exit 1
+}
+
+msg() {
+	echo "$1" >&2
+}
+
+getsize() {
+	local size
+	size=0
+	while IFS= read -r p; do
+		[ -n "$p" ] || continue
+		psize=$(du -s "$src/$p" | cut -d'	' -f1)
+		size=$((size + psize))
+	done
+	echo $size
+}
+
+arch=
+size=300M
+while [ $# -gt 0 ]; do
+	case "$1" in
+		-h|--help) usage;;
+		-a|--arch) shift; arch="$1"; shift;;
+		*) break;;
+	esac
+done
+[ $# -eq 2 ] || usage
+src="${1%/}"
+[ -d "$src" ] || die "$src must be directory"
+dest="$2"
+[ -d "$dest" ] || die "$dest must be directory"
+
+copylist="
+Makefile
+arch/$arch
+scripts
+"
+msg "Calculating filesystem size"
+size=$(echo "$copylist" | getsize)
+size=$((size * 5 / 4)) # account extra 25% for TAGS
+size=${size}K # du returns size in kilobytes
+
+msg "Creating filesystem in RAM"
+sudo mount -t tmpfs -o size="$size" "${src##*/}" "$dest"
+
+msg "Copying kernel sources to RAM filesystem"
+cd "$src"
+cp -a Makefile "$dest"
+cp -a --parents arch/"$arch" "$dest"
+cp -a scripts "$dest"
+
+msg "Creating TAGS"
+cd "$dest"
+etags-kernel
