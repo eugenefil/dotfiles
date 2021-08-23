@@ -12,5 +12,5 @@ kconfigs=$(find -name 'Kconfig*')
 # CONFIG_<symbol> forms. The former is for search from Kconfig files,
 # b/c there is no CONFIG_ prefix there. The latter is for search from
 # all other kernel source files where CONFIG_<symbol> form is used.
-etags --append -l none -r '/^config \([A-Z0-9_]+\)$/\1/' $kconfigs
-etags --append -l none -r '/^config \([A-Z0-9_]+\)$/CONFIG_\1/' $kconfigs
+etags --append -l none -r '/^\(menu\)?config \([A-Za-z0-9_]+\)$/\2/' $kconfigs
+etags --append -l none -r '/^\(menu\)?config \([A-Za-z0-9_]+\)$/CONFIG_\2/' $kconfigs
