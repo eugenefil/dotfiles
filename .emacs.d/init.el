@@ -171,6 +171,10 @@
 ;; like `struct page_offset'
 (add-hook 'prog-mode-hook (lambda () (setq tags-case-fold-search nil)))
 
+;; open Makefile-like filenames in gnumake mode (useful for various
+;; makefiles in kernel source for example)
+(add-to-list 'auto-mode-alist '("[Mm]akefile.*" . makefile-gmake-mode))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
