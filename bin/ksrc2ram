@@ -45,29 +45,40 @@ while [ $# -gt 0 ]; do
 	esac
 done
 [ $# -eq 2 ] || usage
+[ -d "$1" ] || die "$1 must be directory"
 src="${1%/}"
-[ -d "$src" ] || die "$src must be directory"
-dest="$2"
-[ -d "$dest" ] || die "$dest must be directory"
+[ -d "$2" ] || die "$2 must be directory"
+dest=$(realpath "$2")
 
 copylist="
 Makefile
-arch/$arch
 scripts
+arch/$arch
+net/Makefile
+net/Kconfig
 "
+
 msg "Calculating filesystem size"
 size=$(echo "$copylist" | getsize)
 size=$((size * 5 / 4)) # account extra 25% for TAGS
 size=${size}K # du returns size in kilobytes
+
+cut -d' ' -f2 /proc/mounts | grep -Fxq "$dest" && {
+	msg "Mountpoint $dest is already used!"
+	read -p 'Unmount? [y/N] ' r
+	[ "$r" = y ] || exit 1
+	sudo umount "$dest"
+}
 
 msg "Creating filesystem in RAM"
 sudo mount -t tmpfs -o size="$size" "${src##*/}" "$dest"
 
 msg "Copying kernel sources to RAM filesystem"
 cd "$src"
-cp -a Makefile "$dest"
-cp -a --parents arch/"$arch" "$dest"
-cp -a scripts "$dest"
+echo "$copylist" | while IFS= read -r p; do
+	[ -n "$p" ] || continue
+	cp -a --parents "$p" "$dest"
+done
 
 msg "Creating TAGS"
 cd "$dest"
