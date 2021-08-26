@@ -5,6 +5,7 @@ c_h_S_files=$(find -name '*.c' -o -name '*.h' -o -name '*.S')
 etags --declarations $c_h_S_files
 
 makefiles=$(find -name 'Makefile*')
+makefiles="$makefiles scripts/Kbuild.include"
 etags --append -l makefile $makefiles
 
 kconfigs=$(find -name 'Kconfig*')
