@@ -7,3 +7,5 @@ set bell-style none
 "\en": next-history
 "\C-w": kill-region
 "\ew": copy-region-as-kill
+"\eh": backward-kill-word
+
