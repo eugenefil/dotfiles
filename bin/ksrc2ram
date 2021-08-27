@@ -52,8 +52,12 @@ dest=$(realpath "$2")
 
 copylist="
 Makefile
-scripts
-arch/$arch
+scripts/
+init/
+kernel/
+lib/
+arch/Kconfig
+arch/$arch/
 net/Makefile
 net/Kconfig
 "
