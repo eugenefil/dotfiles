@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo rc-service tor stop
