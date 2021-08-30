@@ -14,6 +14,7 @@ grep -vF \
      -e fission.experiment.max-origins.last-qualified \
      -e idle.lastDailyNotification \
      -e media.gmp-manager.lastCheck \
+     -e media.gmp-gmpopenh264. \
      -e places.database.lastMaintenance \
      -e privacy.purge_trackers.last_purge \
      -e security.remote_settings.crlite_filters.checked \
