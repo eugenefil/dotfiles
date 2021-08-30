@@ -171,6 +171,9 @@
 ;; like `struct page_offset'
 (add-hook 'prog-mode-hook (lambda () (setq tags-case-fold-search nil)))
 
+;; open openrc initd scripts in sh-mode
+(add-to-list 'interpreter-mode-alist '("openrc-run" . sh-mode))
+
 ;; open Makefile-like filenames in gnumake mode (useful for various
 ;; makefiles in kernel source for example)
 (add-to-list 'auto-mode-alist '("[Mm]akefile.*" . makefile-gmake-mode))
