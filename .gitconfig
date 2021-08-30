@@ -11,3 +11,7 @@
 	tip = log -n1
 [color]
 	ui = always
+
+# filter to filter out firefox volatile preferences like timestamps
+[filter "ff-volatile-prefs"]
+	clean = filter-ff-volatile-prefs

@@ -1,0 +1,9 @@
+# filter out volatile preferences like timestamps
+prefs.js filter=ff-volatile-prefs
+
+# Placing this here due to lack of a better place.
+# Search engine preferences are stored in search.json.mozlz4,
+# which can be extracted by (first 8 bytes is a magic):
+# tail -c+9 search.json.mozlz4 | python -c 'import sys,lz4.block;sys.stdout.buffer.write(lz4.block.decompress(sys.stdin.buffer.read()))'
+# Because it's a bit complex and requires dependencies, we don't
+# store search engine prefs in git.
