@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+f="$1"
+[ "${f#/}" != "$f" ] || f=$(which "$f")
+apk info -W "$f"
+
