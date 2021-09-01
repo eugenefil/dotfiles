@@ -1,0 +1,3 @@
+colorscheme pablo
+set ignorecase
+
