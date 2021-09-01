@@ -1,9 +1,14 @@
 #!/bin/sh
 set -eu
 
-for p in $(apk search "$@"); do
+pkgs=$(apk search "$@")
+# get package names by stripping versions
+pkgnames=$(printf %s "$pkgs" | sed 's/\(.*\)-.*-.*/\1/')
+# find installed packages
+installed=" $(apk info -e $pkgnames | tr '\n' ' ') "
+for p in $pkgs; do
 	pref= suf=
-	grep -qFx ${p%-*-*} /etc/apk/world && {
+	[ -z "${installed##* ${p%-*-*} *}" ] && { # if installed
 		suf=' +'
 		[ -t 1 ] && pref='\033[1;31m' suf="$suf\033[0m"
 	}
