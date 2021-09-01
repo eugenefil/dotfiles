@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+for p in $(apk search "$@"); do
+	pref= suf=
+	grep -qFx ${p%-*-*} /etc/apk/world && {
+		suf=' +'
+		[ -t 1 ] && pref='\033[1;31m' suf="$suf\033[0m"
+	}
+	printf "$pref%s$suf\n" $p
+done
