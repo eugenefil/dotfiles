@@ -8,7 +8,7 @@ export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTFILESIZE=10000 HISTSIZE=10000
 
 export EDITOR=vim
-PS1='\$ '
+PS1='${?#0}\$ '
 
 # add path to executable gems to PATH
 which ruby &>/dev/null && PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
@@ -26,6 +26,7 @@ alias ds=dirs
 alias md=mkdir
 alias rmr='rm -r'
 alias rmrf='rm -rf'
+alias apkl='apk info -L'
 
 mdcd() { mkdir "$@" && { for dir; do :; done; cd "$dir"; } }
 
