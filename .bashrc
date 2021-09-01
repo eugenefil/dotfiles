@@ -27,6 +27,8 @@ alias md=mkdir
 alias rmr='rm -r'
 alias rmrf='rm -rf'
 alias apkl='apk info -L'
+alias apka='sudo apk add'
+alias apkd='sudo apk del'
 
 mdcd() { mkdir "$@" && { for dir; do :; done; cd "$dir"; } }
 
