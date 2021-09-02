@@ -333,7 +333,12 @@ Windows are numbered left to right, then top to bottom.
 Left-most upper window is number 1." k)
 	     (interactive)
 	     (select-window (nth ,i (winselector-winlist)))))
-    (global-set-key (kbd (format "M-%d" k)) name)))
+    (global-set-key (kbd (format "M-%d" k)) name)
+    ;; diff-mode-map inherits from diff-mode-shared-map, which
+    ;; inherits from special-mode-map, which uses suppress-keymap to
+    ;; construct the map, which shadows global M-%d keys with
+    ;; digit-argument, so we explicitly overwrite them for diff-mode
+    (define-key diff-mode-map (kbd (format "M-%d" k)) name)))
 
 
 (defun startup ()
