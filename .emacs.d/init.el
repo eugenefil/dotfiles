@@ -176,7 +176,7 @@
 
 ;; open Makefile-like filenames in gnumake mode (useful for various
 ;; makefiles in kernel source for example)
-(add-to-list 'auto-mode-alist '("[Mm]akefile.*" . makefile-gmake-mode))
+(add-to-list 'auto-mode-alist '("[Mm]akefile\\(\\..*\\)?$" . makefile-gmake-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
