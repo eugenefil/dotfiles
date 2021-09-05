@@ -178,12 +178,14 @@
 ;; makefiles in kernel source for example)
 (add-to-list 'auto-mode-alist '("[Mm]akefile\\(\\..*\\)?$" . makefile-gmake-mode))
 
+(require 'desktop)
 ;; frameset-filter-alist shares value with
 ;; frameset-persistent-filter-alist, so copy it before modifying
 (setq frameset-filter-alist (copy-tree frameset-filter-alist))
 ;; set 'name func to nil, so frame names are saved when saving desktop
 ;; (see frameset-save, which is indirectly called by desktop-save)
 (setf (cdr (assoc 'name frameset-filter-alist)) nil)
+(add-to-list 'desktop-globals-to-save 'xref--marker-ring)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
