@@ -1,2 +1,2 @@
 #!/bin/sh
-ls -l `which "$@"`
+out=$(which "$@") && ls -l $out
