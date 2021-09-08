@@ -211,7 +211,8 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(org-agenda-window-setup 'other-window)
  '(org-startup-folded 'content)
- '(package-selected-packages '(elpy projectile eglot lua-mode cython-mode markdown-mode))
+ '(package-selected-packages
+   '(yaml-mode elpy projectile eglot lua-mode cython-mode markdown-mode))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(sh-basic-offset 8)
  '(vc-annotate-background "#2B2B2B")
