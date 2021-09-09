@@ -60,6 +60,18 @@ arch/Kconfig
 arch/$arch/
 net/Makefile
 net/Kconfig
+drivers/of/
+drivers/tty/
+drivers/video/console/
+mm/
+fs/sysfs/
+fs/kernfs/
+include/
+Documentation/kbuild/
+Documentation/arm/
+Documentation/devicetree/
+Documentation/admin-guide/
+Documentation/vm/
 "
 
 msg "Calculating filesystem size"
@@ -87,3 +99,6 @@ done
 msg "Creating TAGS"
 cd "$dest"
 etags-kernel
+# for projectile .git marks a root of a project, which provides scope
+# for e.g. xref-find-references, so create empty .git as marker
+git init
