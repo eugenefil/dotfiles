@@ -4,3 +4,5 @@ set hintnames short
 set visualenterauto false
 set searchurls.np https://numpy.org/doc/stable/search.html?q=%s
 set searchurls.gt https://translate.google.com/?sl=en&tl=ru&text=%s&op=translate
+set searchurls.y https://www.yandex.ru/search/?text=%s
+set searchurls.g https://www.google.com/search?q=%s
