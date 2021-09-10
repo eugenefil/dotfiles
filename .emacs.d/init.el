@@ -155,6 +155,10 @@
 (projectile-mode)
 (elpy-enable)
 
+;; in addition to clipboard, copy to primary selection (needed for
+;; pasting in xterm)
+(setq select-enable-primary t)
+
 (require 'rcirc)
 (setq rcirc-default-nick "eugenefil")
 ;; (setq rcirc-server-alist
