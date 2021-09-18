@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+common='-path ./feeds -prune -o'
+
+makefiles=$(find $common \( -name Makefile -o -name '*.mk' \) -print)
+etags -l makefile -r '/^[ \t]*define \([a-zA-Z0-9_\/-]+\)$/\1/' $makefiles
+
+perl=$(find scripts -name '*.p[lm]')
+etags --append $perl scripts/feeds
+
+configs=$(find $common \( -name 'Config*.in' -o -name '.config*.in' \) -print)
+# For symbols in Config files generate both <symbol> and
+# CONFIG_<symbol> forms. The former is for search from Config files,
+# b/c there is no CONFIG_ prefix there. The latter is for search from
+# all other source files where CONFIG_<symbol> form is used.
+etags --append -l none -r '/^[ \t]*\(menu\)?config \([-A-Za-z0-9_]+\)$/\2/' $configs
+etags --append -l none -r '/^[ \t]*\(menu\)?config \([-A-Za-z0-9_]+\)$/CONFIG_\2/' $configs
