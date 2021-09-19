@@ -214,7 +214,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(org-agenda-window-setup 'other-window)
- '(org-startup-folded 'content)
+ '(org-startup-folded t)
  '(package-selected-packages
    '(yaml-mode elpy projectile eglot lua-mode cython-mode markdown-mode))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
