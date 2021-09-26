@@ -12,7 +12,7 @@ etags --append -l makefile -r '/^[ \t]*define \([a-zA-Z0-9_\/-]+\)$/\1/' $makefi
 perl=$(find scripts -name '*.p[lm]')
 etags --append $perl scripts/feeds
 
-configs=$(find $common \( -name 'Config*.in' -o -name '.config*.in' -o -name image-config.in \) -print)
+configs=$(find $common \( -name 'Config*.in' -o -name '.config*.in' -o -name Config.version -o -name image-config.in \) -print)
 # For symbols in Config files generate both <symbol> and
 # CONFIG_<symbol> forms. The former is for search from Config files,
 # b/c there is no CONFIG_ prefix there. The latter is for search from
