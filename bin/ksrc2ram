@@ -52,6 +52,7 @@ dest=$(realpath "$2")
 
 copylist="
 Makefile
+Kconfig
 scripts/
 init/
 kernel/
