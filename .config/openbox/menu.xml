@@ -24,6 +24,11 @@
 	  <command>chromium</command>
 	</action>
       </item>
+      <item label="pavucontrol">
+	<action name="execute">
+	  <command>pavucontrol</command>
+	</action>
+      </item>
     </menu>
     <separator />
     <item label="reconfigure">
