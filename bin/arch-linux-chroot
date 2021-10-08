@@ -1,0 +1,29 @@
+#!/bin/sh
+# For a lack of a better place notes on creating an arch linux chroot
+# in alpine go here.
+
+# Creation goes as follows (taken from
+# https://wiki.archlinux.org/title/Install_Arch_Linux_from_existing_Linux):
+# - Mount livecd iso image and 'sudo unsquashfs
+# <mountpoint>/arch/x86_64/airootfs.sfs' from it somewhere. This is
+# method B from link above, livecd has an almost ready to use system.
+#
+# - Unlike the script in the link, just use arch-chroot from unpacked
+# squashfs 'sudo <squashfs-root>/bin/arch-chroot <squashfs-root>'. We
+# end up using modified arch-chroot though (see below).
+#
+# - Setup keyring: pacman-key --init && pacman-key --populate
+# archlinux
+#
+# - Generate locales: locale-gen
+#
+# - GIDs between alpine and arch differ pretty much. To provide arch
+# with access to alpine host alsa, create an arch group 'alpine-audio'
+# with gid 18 (same as 'audio' group in alpine): groupadd -g 18
+# alpine-audio
+#
+# - Create user: useradd -G wheel,alpine-audio <user>
+
+# Run our custom arch-chroot (which see), which does additional mounts
+# or does them differently from distro's one.
+sudo arch-chroot ~/w/arch-linux

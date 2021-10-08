@@ -86,6 +86,11 @@ chroot_setup() {
   [[ $(trap -p EXIT) ]] && die '(BUG): attempting to overwrite existing EXIT trap'
   trap 'chroot_teardown' EXIT
 
+  # pacman and other utils need chroot dir to be a mountpoint (see
+  # arch-chroot(8)), otherwise will produce error 'could not determine
+  # root mount point /', 'not enough free disk space', etc.
+  chroot_add_mount "$1" "$1" --bind &&
+  chroot_add_mount /home "$1/home" --bind &&
   chroot_add_mount proc "$1/proc" -t proc -o nosuid,noexec,nodev &&
   chroot_add_mount sys "$1/sys" -t sysfs -o nosuid,noexec,nodev,ro &&
   ignore_error chroot_maybe_add_mount "[[ -d '$1/sys/firmware/efi/efivars' ]]" \
@@ -94,7 +99,10 @@ chroot_setup() {
   chroot_add_mount devpts "$1/dev/pts" -t devpts -o mode=0620,gid=5,nosuid,noexec &&
   chroot_add_mount shm "$1/dev/shm" -t tmpfs -o mode=1777,nosuid,nodev &&
   chroot_add_mount /run "$1/run" --bind &&
-  chroot_add_mount tmp "$1/tmp" -t tmpfs -o mode=1777,strictatime,nodev,nosuid
+  # bind host /tmp instead of creating separate tmpfs, so pulseaudio
+  # can find sockets there (see
+  # https://wiki.archlinux.org/title/PulseAudio/Examples#PulseAudio_from_within_a_chroot)
+  chroot_add_mount /tmp "$1/tmp" --bind
 }
 
 chroot_teardown() {
@@ -333,10 +341,6 @@ chrootdir=$1
 shift
 
 [[ -d $chrootdir ]] || die "Can't create chroot on non-directory %s" "$chrootdir"
-
-if ! mountpoint -q "$chrootdir"; then
-  warning "$chrootdir is not a mountpoint. This may have undesirable side effects."
-fi
 
 chroot_setup "$chrootdir" || die "failed to setup chroot %s" "$chrootdir"
 chroot_add_resolv_conf "$chrootdir" || die "failed to setup resolv.conf"

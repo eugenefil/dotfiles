@@ -1,5 +1,0 @@
-#!/bin/sh
-base="$HOME/w/arch-linux"
-mountpoint -q "$base" || sudo mount --bind "$base" "$base" # pacman needs this
-mountpoint -q "$base"/home || sudo mount --bind /home "$base"/home
-sudo "$base"/bin/arch-chroot "$base"
