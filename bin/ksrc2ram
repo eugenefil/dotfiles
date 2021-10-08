@@ -57,6 +57,7 @@ scripts/
 init/
 kernel/
 lib/
+usr/
 arch/Kconfig
 arch/$arch/
 net/Makefile
@@ -72,6 +73,8 @@ Documentation/kbuild/
 Documentation/arm/
 Documentation/devicetree/
 Documentation/admin-guide/
+Documentation/filesystems/
+Documentation/driver-api/
 Documentation/vm/
 "
 
