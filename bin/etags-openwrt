@@ -6,7 +6,7 @@ common='( -path ./feeds -o -path ./build_dir -o -path ./staging_dir ) -prune -o'
 c_h_S_files=$(find $common \( -name '*.c' -o -name '*.h' -o -name '*.S' \) -print)
 etags --declarations $c_h_S_files
 
-makefiles=$(find $common \( -name Makefile -o -name '*.mk' \) -print)
+makefiles=$(find $common \( -name Makefile -o -name '*.mk' -o -name .config \) -print)
 etags --append -l makefile -r '/^[ \t]*define \([a-zA-Z0-9_\/-]+\)$/\1/' -r '/^[ \t]*\([a-zA-Z0-9_\/-]+\) *\?=/\1/' $makefiles
 
 perl=$(find scripts -name '*.p[lm]')
