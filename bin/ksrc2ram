@@ -51,6 +51,7 @@ src="${1%/}"
 dest=$(realpath "$2")
 
 copylist="
+.config
 Makefile
 Kconfig
 scripts/
@@ -60,12 +61,12 @@ lib/
 usr/
 arch/Kconfig
 arch/$arch/
-net/Makefile
-net/Kconfig
 drivers/of/
 drivers/tty/
 drivers/video/console/
+drivers/usb/
 mm/
+net/
 fs/sysfs/
 fs/kernfs/
 include/
