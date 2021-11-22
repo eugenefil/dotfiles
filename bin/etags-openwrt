@@ -7,7 +7,10 @@ c_h_S_files=$(find $common \( -name '*.c' -o -name '*.h' -o -name '*.S' \) -prin
 etags --declarations $c_h_S_files
 
 makefiles=$(find $common \( -name Makefile -o -name '*.mk' -o -name .config \) -print)
-etags --append -l makefile -r '/^[ \t]*define \([a-zA-Z0-9_\/-]+\)$/\1/' -r '/^[ \t]*\([a-zA-Z0-9_\/-]+\) *\?=/\1/' $makefiles
+# intermediate linux configs produced by include/kernel-defaults.mk,
+# while generating main linux .config (which is indexed separately)
+linux_configs=$(find build_dir/target-*/linux-*/linux-* -maxdepth 1 \( -name .config.target -o -name .config.override -o -name .config.set -o -name .config.prev \))
+etags --append -l makefile -r '/^[ \t]*define \([a-zA-Z0-9_\/-]+\)$/\1/' -r '/^[ \t]*\([a-zA-Z0-9_\/-]+\) *\?=/\1/' $makefiles $linux_configs
 
 perl=$(find scripts -name '*.p[lm]')
 etags --append $perl scripts/feeds
