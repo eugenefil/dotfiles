@@ -28,7 +28,7 @@ getsize() {
 	local size
 	size=0
 	while IFS= read -r p; do
-		[ -n "$p" ] || continue
+		[ -n "$p" -a -e "$src/$p" ] || continue
 		psize=$(du -s "$src/$p" | cut -d'	' -f1)
 		size=$((size + psize))
 	done
@@ -97,7 +97,7 @@ sudo mount -t tmpfs -o size="$size" "${src##*/}" "$dest"
 msg "Copying kernel sources to RAM filesystem"
 cd "$src"
 echo "$copylist" | while IFS= read -r p; do
-	[ -n "$p" ] || continue
+	[ -n "$p" -a -e "$p" ] || continue
 	cp -a --parents "$p" "$dest"
 done
 
