@@ -6,7 +6,7 @@ etags --declarations $c_h_S_files
 
 # note, some makefiles in scripts/ have .include suffix
 makefiles=$(find -name 'Makefile*' -o -name '.config*' -o -path './scripts/*.include')
-etags --append -l makefile $makefiles
+etags --append -l makefile -r '/^[ \t]*define \([a-zA-Z0-9_-]+\)$/\1/' $makefiles
 
 kconfigs=$(find -name 'Kconfig*')
 # For symbols in Kconfig files generate both <symbol> and
