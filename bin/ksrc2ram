@@ -21,7 +21,7 @@ die() {
 }
 
 msg() {
-	echo "$1" >&2
+	echo "$@" >&2
 }
 
 getsize() {
@@ -79,10 +79,11 @@ Documentation/driver-api/
 Documentation/vm/
 "
 
-msg "Calculating filesystem size"
+msg -n "Calculating filesystem size... "
 size=$(echo "$copylist" | getsize)
 size=$((size * 5 / 4)) # account extra 25% for TAGS
 size=${size}K # du returns size in kilobytes
+msg $size
 
 cut -d' ' -f2 /proc/mounts | grep -Fxq "$dest" && {
 	msg "Mountpoint $dest is already used!"
