@@ -54,6 +54,7 @@ copylist="
 .config
 Makefile
 Kconfig
+Kbuild
 scripts/
 init/
 kernel/
@@ -77,6 +78,7 @@ Documentation/admin-guide/
 Documentation/filesystems/
 Documentation/driver-api/
 Documentation/vm/
+security/
 "
 
 msg -n "Calculating filesystem size... "
