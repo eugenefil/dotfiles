@@ -19,6 +19,7 @@ alias l='ls -al --color=auto'
 alias l1='ls -1 --color=auto'
 alias grep='grep --color=auto'
 alias egrep='grep -E --color=auto'
+alias bgrep='LANG=C grep -aboP'
 alias udiff='diff -u --color=auto'
 alias pu=pushd
 alias po=popd
