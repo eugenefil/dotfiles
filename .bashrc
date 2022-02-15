@@ -17,16 +17,30 @@ shopt -s globstar autocd
 
 alias l='ls -al --color=auto'
 alias l1='ls -1 --color=auto'
+
 alias grep='grep --color=auto'
 alias egrep='grep -E --color=auto'
 alias bgrep='LANG=C grep -aboP'
+
+alias elfh='readelf -Wh'
+alias elfS='readelf -WS'
+alias elfs='readelf -Ws'
+alias elfr='readelf -Wr'
+alias elfl='readelf -Wl'
+alias elfp='readelf -Wp'
+alias elfx='readelf -Wx'
+alias disas='objdump -d'
+
 alias udiff='diff -u --color=auto'
+
 alias pu=pushd
 alias po=popd
 alias ds=dirs
+
 alias md=mkdir
 alias rmr='rm -r'
 alias rmrf='rm -rf'
+
 alias apkl='apk info -L'
 alias apka='sudo apk add'
 alias apkd='sudo apk del'
