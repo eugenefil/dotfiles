@@ -1,2 +1,4 @@
 #!/bin/sh
-awk '/ .\.rela\.'"$1"'. at offset/ {n = $(NF-1)+2; printf "\n"} n {n--; print}'
+awk '
+substr($3, 2, length($3) - 2) ~ /'"$1"'/ {n = $(NF-1)+2; printf "\n"}
+n {n--; print}'
