@@ -30,6 +30,7 @@ alias elfl='readelf -Wl'
 alias elfd='readelf -Wd'
 alias elfp='readelf -Wp'
 alias elfx='readelf -Wx'
+alias elfa='readelf -Wa'
 alias disas='objdump -d'
 
 alias udiff='diff -u --color=auto'
