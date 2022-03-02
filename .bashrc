@@ -32,6 +32,7 @@ alias elfp='readelf -Wp'
 alias elfx='readelf -Wx'
 alias elfa='readelf -Wa'
 alias disas='objdump -d'
+alias hex='printf "%x\n"'
 
 alias udiff='diff -u --color=auto'
 
