@@ -1,0 +1,11 @@
+#!/bin/sh
+
+findval() { awk '$2~/'$(printf "%0$(($2*2))x" "$1")'/'; }
+
+dump() { cat /proc/$1/maps|grep ' 0 '|grep ' rw-'|awk '{print $1}'|( while IFS=- read a b; do sudo dd if=/proc/$1/mem skip=$((0x$a)) count=$((0x$b-0x$a)) bs=4096 iflag=skip_bytes,count_bytes|xxd -e -o$((0x$a)) -g16|cut -d' ' -f1-2; done ); }
+
+search() { rm -f vals; while true; do read -p 'Enter current value: ' val; [ -n "$val" ] || break; dump $1|findval "$val" $2|if [ -f vals ]; then join vals - >vals1; mv vals1 vals; else cat >vals; fi; wc -l vals; done; }
+
+pid=$1
+nbytes=$2
+search $pid $nbytes
