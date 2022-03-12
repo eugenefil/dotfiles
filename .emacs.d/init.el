@@ -153,7 +153,6 @@
 (put 'set-goal-column 'disabled nil)
 
 (projectile-mode)
-(elpy-enable)
 
 ;; in addition to clipboard, copy to primary selection (needed for
 ;; pasting in xterm)
@@ -216,7 +215,7 @@
  '(org-agenda-window-setup 'other-window)
  '(org-startup-folded t)
  '(package-selected-packages
-   '(magit yaml-mode elpy projectile eglot lua-mode cython-mode markdown-mode))
+   '(magit yaml-mode projectile eglot lua-mode cython-mode markdown-mode))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(sh-basic-offset 8)
  '(vc-annotate-background "#2B2B2B")
@@ -347,12 +346,21 @@ Windows are numbered left to right, then top to bottom.
 Left-most upper window is number 1." k)
 	     (interactive)
 	     (select-window (nth ,i (winselector-winlist)))))
-    (global-set-key (kbd (format "M-%d" k)) name)
-    ;; diff-mode-map inherits from diff-mode-shared-map, which
-    ;; inherits from special-mode-map, which uses suppress-keymap to
-    ;; construct the map, which shadows global M-%d keys with
-    ;; digit-argument, so we explicitly overwrite them for diff-mode
-    (define-key diff-mode-map (kbd (format "M-%d" k)) name)))
+    (global-set-key (kbd (format "M-%d" k)) name)))
+
+;; diff-mode-map inherits from diff-mode-shared-map, which
+;; inherits from special-mode-map, which uses suppress-keymap to
+;; construct the map, which shadows global M-%d keys with
+;; digit-argument, so we explicitly overwrite them for diff-mode
+(add-hook 'diff-mode-hook
+	  (lambda ()
+	    (define-key diff-mode-map (kbd "M-1") 'winselector-select-1)
+	    (define-key diff-mode-map (kbd "M-2") 'winselector-select-2)
+	    (define-key diff-mode-map (kbd "M-3") 'winselector-select-3)
+	    (define-key diff-mode-map (kbd "M-4") 'winselector-select-4)
+	    (define-key diff-mode-map (kbd "M-5") 'winselector-select-5)
+	    (define-key diff-mode-map (kbd "M-6") 'winselector-select-6)
+	    (define-key diff-mode-map (kbd "M-7") 'winselector-select-7)))
 
 
 (defun startup ()
