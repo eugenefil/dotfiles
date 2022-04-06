@@ -1,17 +1,22 @@
 #!/bin/sh
 set -eu
 
-c_h_S_y_files=$(find -name '*.[chSy]')
+c_h_S_y_files=$(find -name '*.[chSy]' -a -not -name '*.mod.c')
 etags --declarations $c_h_S_y_files
 
 # note, some makefiles in scripts/ have .include suffix
-makefiles=$(find -name 'Makefile*' -o -name '.config*' -o -path './scripts/*.include')
-etags --append -l makefile -r '/^[ \t]*define \([a-zA-Z0-9_-]+\)$/\1/' $makefiles
+makefiles=$(find -name 'Makefile*' -o -path './.config' -o -path './scripts/*.include')
+if [ -n "$makefiles" ]; then
+	etags --append -l makefile -r '/^[ \t]*define \([a-zA-Z0-9_-]+\)$/\1/' $makefiles
+fi
 
 kconfigs=$(find -name 'Kconfig*')
-# For symbols in Kconfig files generate both <symbol> and
-# CONFIG_<symbol> forms. The former is for search from Kconfig files,
-# b/c there is no CONFIG_ prefix there. The latter is for search from
-# all other kernel source files where CONFIG_<symbol> form is used.
-etags --append -l none -r '/^\(menu\)?config \([A-Za-z0-9_]+\)$/\2/' $kconfigs
-etags --append -l none -r '/^\(menu\)?config \([A-Za-z0-9_]+\)$/CONFIG_\2/' $kconfigs
+if [ -n "$kconfigs" ]; then
+	# For symbols in Kconfig files generate both <symbol> and
+	# CONFIG_<symbol> forms. The former is for search from Kconfig
+	# files, b/c there is no CONFIG_ prefix there. The latter is
+	# for search from all other kernel source files where
+	# CONFIG_<symbol> form is used.
+	etags --append -l none -r '/^\(menu\)?config \([A-Za-z0-9_]+\)$/\2/' $kconfigs
+	etags --append -l none -r '/^\(menu\)?config \([A-Za-z0-9_]+\)$/CONFIG_\2/' $kconfigs
+fi
