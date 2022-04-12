@@ -3,27 +3,26 @@ import subprocess as sp
 import struct
 import signal
 import sys
+import argparse
 
-signal.signal(signal.SIGPIPE, signal.SIG_DFL) # terminate on sigpipe
+def parse_args():
+    p = argparse.ArgumentParser(description='Print/set dynamic debug points in kernel')
+    sub = p.add_subparsers(required=True)
 
-ret,out = sp.getstatusoutput(r'set -euo pipefail; nm -n vmlinux|grep -F -m2 -e __start___dyndbg -e __stop___dyndbg|cut -d" " -f1')
-if ret and ret!=141: # ignore 141 - sigpipe caused by grep -m
-    print(out, file=sys.stderr)
-    exit(ret)
-hex2int=lambda s: int(s, 16)
-start_va,end_va=[hex2int(va_str) for va_str in out.split()]
+    pp = sub.add_parser('print', description='Print dynamic debug points')
+    pp.set_defaults(func=print_points)
+    pp.add_argument('indices', nargs='*', type=int, metavar='index', help='Index of debug point')
 
-# note: when reading section list ignore .vectors*, .stubs, stop when reached .debug_* sections
-ret,out=sp.getstatusoutput(r"set -euo pipefail; readelf -WS vmlinux|tr -d ']['|awk 'NR>=6 && $2!~/^\.(vectors|stubs)/{if ($2~/^\.debug_/) {exit} print $1,$2,$4,$5,$6}'")
-if ret and ret!=141: # ignore 141 - sigpipe caused by awk's exit call
-    print(out, file=sys.stderr)
-    exit(ret)
-colnames=['i','name','start_va','start_off','size']
-sections=[dict(zip(colnames,sect_str.split())) for sect_str in out.split('\n')]
-typefns={'i':int,'start_va':hex2int,'start_off':hex2int,'size':hex2int}
-sections=[{k:typefns.get(k, lambda x:x)(v) for k,v in s.items()} for s in sections]
+    pp = sub.add_parser('set', description='Set dynamic debug points')
+    pp.set_defaults(func=set_points)
+    pp.add_argument('indices', nargs='+', type=int, metavar='index', help='Index of debug point shown by print command')
 
-def find_sect(va):
+    pp = sub.add_parser('unset', description='Unset dynamic debug points')
+    pp.set_defaults(func=unset_points)
+    pp.add_argument('indices', nargs='+', type=int, metavar='index', help='Index of debug point shown by print command')
+    return p.parse_args()
+
+def find_sect(va, sections):
     assert(len(sections))
     sect = None
     for s in sections:
@@ -31,14 +30,10 @@ def find_sect(va):
         sect = s
     return sect
 
-def get_offset(va):
-    sect = find_sect(va)
+def get_offset(va, sections):
+    sect = find_sect(va, sections)
     assert(sect)
     return sect['start_off'] + va - sect['start_va']
-
-start_off = get_offset(start_va)
-end_off = start_off + end_va - start_va
-#print(f'{start_off}-{end_off}')
 
 def read_str(f, offset):
     f.seek(offset)
@@ -46,21 +41,82 @@ def read_str(f, offset):
     assert(b'\x00' in s) # increase buffer if this fires
     return s.split(b'\x00')[0].decode()
 
-f = open('vmlinux', 'rb')
-print('index', 'modname', 'function', 'filename', 'lineno', 'flags', 'format', sep='\t')
-for i, o in enumerate(range(start_off, end_off, 24)):
-    f.seek(o)
-    # struct _ddebug {
-    #         const char *modname;
-    #         const char *function;
-    #         const char *filename;
-    #         const char *format;
-    #         unsigned int lineno:18;
-    #         unsigned int flags:8;
-    # }
-    desc = struct.unpack('<5I4x', f.read(24)) # unpack descriptor: 5 ints + 4 bytes padding (32-bit LE)
-    modname, func, fname, fmt = [read_str(f, get_offset(va)) for va in desc[:4]]
-    fmt = repr(fmt)[1:-1] # escape newlines, tabs, etc and strip outer quotes
-    lineno = desc[4] & ((1<<18)-1)
-    flags = (desc[4] & (((1<<8)-1)<<18))>>18
-    print(i, modname, func, fname, lineno, flags, fmt, sep='\t')
+def print_points(args):
+    print('index', 'modname', 'function', 'filename', 'lineno', 'flags', 'format', sep='\t')
+    for i in args.indices:
+        off = args.start_off + i * 24
+        args.f.seek(off)
+        # struct _ddebug {
+        #         const char *modname;
+        #         const char *function;
+        #         const char *filename;
+        #         const char *format;
+        #         unsigned int lineno:18;
+        #         unsigned int flags:8;
+        # }
+        desc = struct.unpack('<5I4x', args.f.read(24)) # unpack descriptor: 5 ints + 4 bytes padding (32-bit LE)
+        modname, func, fname, fmt = [read_str(args.f, get_offset(va, args.sections)) for va in desc[:4]]
+        fmt = repr(fmt)[1:-1] # escape newlines, tabs, etc and strip outer quotes
+        lineno = desc[4] & ((1<<18)-1)
+        flags = (desc[4] & (((1<<8)-1)<<18))>>18
+        print(i, modname, func, fname, lineno, flags, fmt, sep='\t')
+
+def set_unset_points(args, do_set):
+    int_size = 4
+    for i in args.indices:
+        # flags and lineno share 5th int of descriptor (see struct _ddebug),
+        # flags start at bit 18, i.e. bit 2 of 3rd byte
+        flags_off = args.start_off + i * 24 + 4 * int_size + 2 # byte w/ the flags (32-bit LE)
+        args.f.seek(flags_off)
+        b = list(args.f.read(1))[0]
+        # the first bit of flags is _DPRINTK_FLAGS_PRINT - print flag
+        if do_set:
+            b |= 4 # set bit 2 - the first bit of flags
+        else:
+            b &= ~4 # unset bit 2
+        args.f.seek(-1, 1) # rewind one byte back
+        args.f.write(bytes([b]))
+
+def set_points(args):
+    set_unset_points(args, True)
+
+def unset_points(args):
+    set_unset_points(args, False)
+
+def main(args):
+    ret,out = sp.getstatusoutput(r'set -euo pipefail; nm -n vmlinux|grep -F -m2 -e __start___dyndbg -e __stop___dyndbg|cut -d" " -f1')
+    if ret and ret!=141: # ignore 141 - sigpipe caused by grep -m
+        print(out, file=sys.stderr)
+        exit(ret)
+    hex2int=lambda s: int(s, 16)
+    start_va,end_va=[hex2int(va_str) for va_str in out.split()]
+    assert(end_va >= start_va)
+    assert((end_va - start_va) % 24 == 0)
+
+    # note: when reading section list ignore .vectors*, .stubs, stop when reached .debug_* sections
+    ret,out=sp.getstatusoutput(r"set -euo pipefail; readelf -WS vmlinux|tr -d ']['|awk 'NR>=6 && $2!~/^\.(vectors|stubs)/{if ($2~/^\.debug_/) {exit} print $1,$2,$4,$5,$6}'")
+    if ret and ret!=141: # ignore 141 - sigpipe caused by awk's exit call
+        print(out, file=sys.stderr)
+        exit(ret)
+    colnames=['i','name','start_va','start_off','size']
+    sections=[dict(zip(colnames,sect_str.split())) for sect_str in out.split('\n')]
+    typefns={'i':int,'start_va':hex2int,'start_off':hex2int,'size':hex2int}
+    sections=[{k:typefns.get(k, lambda x:x)(v) for k,v in s.items()} for s in sections]
+
+    args.f = open('vmlinux', 'r+b')
+    args.sections = sections
+    args.start_off = get_offset(start_va, sections)
+    args.end_off = args.start_off + end_va - start_va
+    num_points = (end_va - start_va) // 24
+    if args.indices:
+        for i in args.indices:
+            if i < 0 or i >= num_points:
+                print(f"index {i} is out of bounds [0,{num_points-1}]", file=sys.stderr)
+                exit(1)
+    else:
+        args.indices = range(num_points)
+    args.func(args)
+
+if __name__ == '__main__':
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL) # terminate on sigpipe
+    main(parse_args())
