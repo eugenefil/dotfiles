@@ -1,0 +1,66 @@
+#!/usr/bin/python
+import subprocess as sp
+import struct
+import signal
+import sys
+
+signal.signal(signal.SIGPIPE, signal.SIG_DFL) # terminate on sigpipe
+
+ret,out = sp.getstatusoutput(r'set -euo pipefail; nm -n vmlinux|grep -F -m2 -e __start___dyndbg -e __stop___dyndbg|cut -d" " -f1')
+if ret and ret!=141: # ignore 141 - sigpipe caused by grep -m
+    print(out, file=sys.stderr)
+    exit(ret)
+hex2int=lambda s: int(s, 16)
+start_va,end_va=[hex2int(va_str) for va_str in out.split()]
+
+# note: when reading section list ignore .vectors*, .stubs, stop when reached .debug_* sections
+ret,out=sp.getstatusoutput(r"set -euo pipefail; readelf -WS vmlinux|tr -d ']['|awk 'NR>=6 && $2!~/^\.(vectors|stubs)/{if ($2~/^\.debug_/) {exit} print $1,$2,$4,$5,$6}'")
+if ret and ret!=141: # ignore 141 - sigpipe caused by awk's exit call
+    print(out, file=sys.stderr)
+    exit(ret)
+colnames=['i','name','start_va','start_off','size']
+sections=[dict(zip(colnames,sect_str.split())) for sect_str in out.split('\n')]
+typefns={'i':int,'start_va':hex2int,'start_off':hex2int,'size':hex2int}
+sections=[{k:typefns.get(k, lambda x:x)(v) for k,v in s.items()} for s in sections]
+
+def find_sect(va):
+    assert(len(sections))
+    sect = None
+    for s in sections:
+        if va < s['start_va']: break
+        sect = s
+    return sect
+
+def get_offset(va):
+    sect = find_sect(va)
+    assert(sect)
+    return sect['start_off'] + va - sect['start_va']
+
+start_off = get_offset(start_va)
+end_off = start_off + end_va - start_va
+#print(f'{start_off}-{end_off}')
+
+def read_str(f, offset):
+    f.seek(offset)
+    s = f.read(256)
+    assert(b'\x00' in s) # increase buffer if this fires
+    return s.split(b'\x00')[0].decode()
+
+f = open('vmlinux', 'rb')
+print('index', 'modname', 'function', 'filename', 'lineno', 'flags', 'format', sep='\t')
+for i, o in enumerate(range(start_off, end_off, 24)):
+    f.seek(o)
+    # struct _ddebug {
+    #         const char *modname;
+    #         const char *function;
+    #         const char *filename;
+    #         const char *format;
+    #         unsigned int lineno:18;
+    #         unsigned int flags:8;
+    # }
+    desc = struct.unpack('<5I4x', f.read(24)) # unpack descriptor: 5 ints + 4 bytes padding (32-bit LE)
+    modname, func, fname, fmt = [read_str(f, get_offset(va)) for va in desc[:4]]
+    fmt = repr(fmt)[1:-1] # escape newlines, tabs, etc and strip outer quotes
+    lineno = desc[4] & ((1<<18)-1)
+    flags = (desc[4] & (((1<<8)-1)<<18))>>18
+    print(i, modname, func, fname, lineno, flags, fmt, sep='\t')
