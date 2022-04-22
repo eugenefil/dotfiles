@@ -70,6 +70,7 @@ mm/
 net/
 fs/sysfs/
 fs/kernfs/
+fs/proc/
 include/
 Documentation/kbuild/
 Documentation/arm/
