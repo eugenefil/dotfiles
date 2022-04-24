@@ -62,6 +62,7 @@ lib/
 usr/
 arch/Kconfig
 arch/$arch/
+drivers/char/
 drivers/of/
 drivers/tty/
 drivers/video/console/
