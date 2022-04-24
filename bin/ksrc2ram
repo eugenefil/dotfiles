@@ -62,6 +62,7 @@ lib/
 usr/
 arch/Kconfig
 arch/$arch/
+drivers/base/
 drivers/char/
 drivers/of/
 drivers/tty/
@@ -69,9 +70,7 @@ drivers/video/console/
 drivers/usb/
 mm/
 net/
-fs/sysfs/
-fs/kernfs/
-fs/proc/
+fs/
 include/
 Documentation/kbuild/
 Documentation/arm/
