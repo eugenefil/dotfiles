@@ -52,6 +52,7 @@ dest=$(realpath "$2")
 
 copylist="
 .config
+block/
 Makefile
 Kconfig
 Kbuild
@@ -63,6 +64,7 @@ usr/
 arch/Kconfig
 arch/$arch/
 drivers/base/
+drivers/block/
 drivers/char/
 drivers/of/
 drivers/pci/
