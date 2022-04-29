@@ -71,6 +71,7 @@ drivers/pci/
 drivers/tty/
 drivers/video/console/
 drivers/usb/
+drivers/virtio/
 mm/
 net/
 fs/
