@@ -42,9 +42,10 @@ def read_str(f, offset):
     return s.split(b'\x00')[0].decode()
 
 def print_points(args):
-    print('index', 'modname', 'function', 'filename', 'lineno', 'flags', 'format', sep='\t')
+    print('index', 'va', 'offset', 'modname', 'function', 'filename', 'lineno', 'flags', 'format', sep='\t')
     for i in args.indices:
         off = args.start_off + i * 24
+        va = args.start_va + i * 24
         args.f.seek(off)
         # struct _ddebug {
         #         const char *modname;
@@ -59,7 +60,7 @@ def print_points(args):
         fmt = repr(fmt)[1:-1] # escape newlines, tabs, etc and strip outer quotes
         lineno = desc[4] & ((1<<18)-1)
         flags = (desc[4] & (((1<<8)-1)<<18))>>18
-        print(i, modname, func, fname, lineno, flags, fmt, sep='\t')
+        print(i, hex(va), hex(off), modname, func, fname, lineno, flags, fmt, sep='\t')
 
 def set_unset_points(args, do_set):
     int_size = 4
@@ -92,6 +93,7 @@ def main(args):
     start_va,end_va=[hex2int(va_str) for va_str in out.split()]
     assert(end_va >= start_va)
     assert((end_va - start_va) % 24 == 0)
+    args.start_va = start_va
 
     # note: when reading section list ignore .vectors*, .stubs, stop when reached .debug_* sections
     ret,out=sp.getstatusoutput(r"set -euo pipefail; readelf -WS vmlinux|tr -d ']['|awk 'NR>=6 && $2!~/^\.(vectors|stubs)/{if ($2~/^\.debug_/) {exit} print $1,$2,$4,$5,$6}'")
