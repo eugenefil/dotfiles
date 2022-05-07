@@ -366,7 +366,10 @@ Left-most upper window is number 1." k)
 (defun startup ()
   (split-window-right)
   (shell)
-  (rename-buffer "2")
+  (rename-buffer "1") ; left window
+  (other-window 1) ; select right window
   (shell)
-  (rename-buffer "1"))
+  (rename-buffer "3")
+  (shell)
+  (rename-buffer "2")) ; window 3 will be underneath 2
 (startup)
