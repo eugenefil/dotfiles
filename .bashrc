@@ -4,8 +4,10 @@
 set +H
 
 # don't put duplicate lines in history
-export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-export HISTFILESIZE=10000 HISTSIZE=10000
+HISTCONTROL=erasedups
+HISTFILESIZE=10000
+HISTSIZE=10000
+shopt -s histappend
 
 export EDITOR=vim
 PS1='${?#0}\$ '
