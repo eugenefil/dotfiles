@@ -215,7 +215,7 @@
  '(org-agenda-window-setup 'other-window)
  '(org-startup-folded t)
  '(package-selected-packages
-   '(magit yaml-mode projectile eglot lua-mode cython-mode markdown-mode))
+   '(meson-mode magit yaml-mode projectile eglot lua-mode cython-mode markdown-mode))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(sh-basic-offset 8)
  '(vc-annotate-background "#2B2B2B")
