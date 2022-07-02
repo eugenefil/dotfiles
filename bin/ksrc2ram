@@ -66,6 +66,9 @@ arch/$arch/
 drivers/base/
 drivers/block/
 drivers/char/
+drivers/gpu/drm/Kconfig
+drivers/gpu/drm/Makefile
+drivers/gpu/drm/virtio/
 drivers/input/
 drivers/of/
 drivers/pci/
