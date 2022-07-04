@@ -10,7 +10,7 @@
     }
 }
 
-if [ -z "$SSH_CLIENT" ]; then
+if [ -z "$SSH_CONNECTION" ]; then
     tput cvvis # block cursor mode
     clear # clear screen
 
