@@ -746,7 +746,7 @@
 <application class="Emacs">
   <decor>no</decor>
 </application>
-<application class="firefox-default">
+<application class="firefox">
   <decor>no</decor>
 </application>
 
