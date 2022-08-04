@@ -1,0 +1,4 @@
+#!/bin/sh
+# see Documentation/admin-guide/pm/sleep-states.rst in kernel source
+echo deep > /sys/power/mem_sleep
+echo mem > /sys/power/state
