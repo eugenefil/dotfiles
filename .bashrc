@@ -54,6 +54,7 @@ alias apkd='sudo apk del'
 alias apki='apk info'
 
 mdcd() { mkdir "$@" && { for dir; do :; done; cd "$dir"; } }
+fncat() { for f; do echo "$f":; cat "$f"; done }
 
 playalarm() { local n; n="${1:-1}"; while ((n--)); do aplay -q ~/alarm.wav; sleep 1s; done; }
 loopalarm() { local n; n="${1:-1000}"; while ((n--)); do playalarm 5; sleep 1m; done; }
