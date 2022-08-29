@@ -9,9 +9,101 @@
 	ci = commit
 	co = checkout
 	tip = log -n1
-	# adapted from https://stackoverflow.com/questions/8475448/find-merge-commit-which-include-a-specific-commit
+
+	# find-merge finds commit which merged our target commit into
+	# some branch (see https://stackoverflow.com/questions/8475448/find-merge-commit-which-include-a-specific-commit and example below)
 	find-merge = "!sh -c 'commit=$0 && branch=${1:-HEAD} && { git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n; } | sort -k2 -s | uniq -f1 -d | sort -n | tail -1 | cut -f2'"
+	#        C---E---G--- feature
+	#       /         \
+	# -A---B---D---F---H---I---J--- master
+	#
+	# E.g. with graph above we want to find, which commit merged
+	# commit C into master branch, i.e. we want to find commit H
+	# with `git find-merge C master' or just `git find-merge C'.
+	# In this case find-merge will work as follows:
+	#
+	# 1) git rev-list --ancestry-path C..master | cat -n
+	#
+	# Normally C..master returns commits reachable from master
+	# (all commits above), excluding those reachable from C (A, B,
+	# C), i.e.:
+	#
+	#            E---G--- feature
+	#                 \
+	#          D---F---H---I---J--- master
+	#
+	# But with --ancestry-path only those commits from C..master
+	# are returned which lead from C to master:
+	#
+	#            E---G--- feature
+	#                 \
+	#                  H---I---J--- master
+	#
+	# And they're numbered with `cat -n'.
+	#
+	# 2) git rev-list C..master --first-parent | cat -n
+	#
+	# With --first-parent only commits reachable through 1st
+	# parents are taken from C..master. When merging, current
+	# branch (i.e. one into which we merge) is 1st parent. On
+	# graph commit H is a merge commit (has 2 parents) and master
+	# is 1st parent (b/c we merged feature into master). We get:
+	#
+	#
+	#
+	#          D---F---H---I---J--- master
+	#
+	# Output from both 1) and 2) will be:
+	#
+	# 1 J # --ancestry-path output
+	# 2 I
+	# 3 H
+	# 4 G
+	# 5 E
+	# 1 J # --first-parent output
+	# 2 I
+	# 3 H
+	# 4 F
+	# 5 D
+	#
+	# 3) sort -k2 -s
+	#
+	# Stable-sorts the above output by commit name. Stable is
+	# important, b/c in pairs of duplicates --ancestry-path
+	# commits will always be first (see below). We get:
+	#
+	# 5 D
+	# 5 E
+	# 4 F
+	# 4 G
+	# 3 H
+	# 3 H
+	# 2 I
+	# 2 I
+	# 1 J
+	# 1 J
+	#
+	# 4) uniq -f1 -d
+	#
+	# Note, that our sought commit H is a first point where
+	# feature and master histories converge again after diverging,
+	# i.e. starting from H they duplicate. Uniq takes those
+	# duplicates and chooses 1st one from each pair. Thanks to
+	# stable sort in 3), these will always be commits from
+	# --ancestry-path. We get:
+	#
+	# 3 H
+	# 2 I
+	# 1 J
+	#
+	# 5) sort -n | tail -1 | cut -f2
+	#
+	# We now sort them back into their original order preserved by
+	# `cat -n' (J I H) and take the last commit, i.e. the first
+	# one where histories converge - the merge commit H.
+
 	show-merge = "!sh -c 'merge=$(git find-merge $0 $1) && [ -n \"$merge\" ] && git show $merge'"
+
 [color]
 	ui = always
 
