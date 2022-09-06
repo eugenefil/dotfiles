@@ -167,7 +167,7 @@
 (require 'eglot)
 ;; shadow ccls w/ clangd for c and c++ modes
 (add-to-list 'eglot-server-programs '((c++-mode c-mode) . ("clangd")))
-(add-hook 'c++-mode-hook 'eglot-ensure)
+;; (add-hook 'c++-mode-hook 'eglot-ensure)
 
 ;; make tag search case-sensitive in programming modes, otherwise
 ;; xref-find-definitions for e.g. PAGE_OFFSET also finds definitions
