@@ -105,10 +105,7 @@ Documentation/vm/
 security/
 "
 
-excludes=$(mktemp)
-trap 'rm "$excludes"' EXIT
-echo "$copylist" | grep ^- | cut -d- -f2 | expandlist >"$excludes"
-copylist=$(echo "$copylist" | grep -v ^- | expandlist | grep -vFf "$excludes")
+copylist=$(echo "$copylist" | expandlist)
 
 msg -n "Calculating filesystem size... "
 size=$(echo "$copylist" | getsize)
