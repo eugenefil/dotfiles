@@ -11,6 +11,7 @@ sources found in src and create TAGS file.
 
   -a, --arch=arch  from arches inside arch/ copy only arch/<arch>
   -h, --help       display this help and exit
+  -n, --dry-run    don't actually mount or copy anything
 "
 	exit 1
 }
@@ -22,6 +23,18 @@ die() {
 
 msg() {
 	echo "$@" >&2
+}
+
+expandlist() {
+	local p oldpwd="$PWD"
+	cd "$src"
+	while IFS= read -r p; do
+		set -- $p # expand glob
+		for p; do
+			[ -e "$p" ] && echo "$p"
+		done
+	done
+	cd "$oldpwd"
 }
 
 getsize() {
@@ -37,10 +50,12 @@ getsize() {
 
 arch=
 size=300M
+dry_run=
 while [ $# -gt 0 ]; do
 	case "$1" in
 		-h|--help) usage;;
 		-a|--arch) shift; arch="$1"; shift;;
+		-n|--dry-run) dry_run=1; shift;;
 		*) break;;
 	esac
 done
@@ -90,11 +105,18 @@ Documentation/vm/
 security/
 "
 
+excludes=$(mktemp)
+trap 'rm "$excludes"' EXIT
+echo "$copylist" | grep ^- | cut -d- -f2 | expandlist >"$excludes"
+copylist=$(echo "$copylist" | grep -v ^- | expandlist | grep -vFf "$excludes")
+
 msg -n "Calculating filesystem size... "
 size=$(echo "$copylist" | getsize)
 size=$((size * 5 / 4)) # account extra 25% for TAGS
 size=${size}K # du returns size in kilobytes
 msg $size
+
+[ -n "$dry_run" ] && exit 0
 
 cut -d' ' -f2 /proc/mounts | grep -Fxq "$dest" && {
 	msg "Mountpoint $dest is already used!"
