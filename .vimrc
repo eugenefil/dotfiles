@@ -1,3 +1,3 @@
-colorscheme pablo
+colorscheme desert
 set ignorecase
 
