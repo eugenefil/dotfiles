@@ -29,7 +29,8 @@ if [ -z "$SSH_CONNECTION" ]; then
 			# thus leading to tty hangup, so xorg can't
 			# revert hung-up tty leaving it in graphics
 			# mode unusable by new getty instance.
-			(sleep 1; DISPLAY=:0 ~/.xinitrc) &
+			(sleep 1; DISPLAY=:0 exec ~/.xinitrc) &
+
 			# Run raw Xorg skipping startx, xinit,
 			# Xorg.wrap. No cookie auth is used, b/c we're
 			# the only user. End session via `pkill Xorg`.
