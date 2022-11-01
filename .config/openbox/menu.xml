@@ -3,9 +3,9 @@
 <openbox_menu xmlns="http://openbox.org/3.4/menu">
 
   <menu id="root-menu" label="Openbox 3">
-    <item label="xterm">
+    <item label="emacs">
       <action name="execute">
-	<command>xterm</command>
+	<command>emacs</command>
       </action>
     </item>
     <item label="firefox">
@@ -13,9 +13,9 @@
 	<command>firefox</command>
       </action>
     </item>
-    <item label="emacs">
+    <item label="xterm">
       <action name="execute">
-	<command>emacs</command>
+	<command>xterm</command>
       </action>
     </item>
     <menu id="misc-menu" label="misc">
