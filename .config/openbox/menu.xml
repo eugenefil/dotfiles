@@ -8,14 +8,14 @@
 	<command>emacs</command>
       </action>
     </item>
-    <item label="firefox">
-      <action name="execute">
-	<command>firefox</command>
-      </action>
-    </item>
     <item label="xterm">
       <action name="execute">
 	<command>xterm</command>
+      </action>
+    </item>
+    <item label="firefox">
+      <action name="execute">
+	<command>firefox</command>
       </action>
     </item>
     <menu id="misc-menu" label="misc">
