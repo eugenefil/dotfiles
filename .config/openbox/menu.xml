@@ -21,7 +21,7 @@
     <menu id="misc-menu" label="misc">
       <item label="chromium">
 	<action name="execute">
-	  <command>chromium</command>
+	  <command>chromium-browser</command>
 	</action>
       </item>
       <item label="pavucontrol">
