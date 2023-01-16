@@ -7,5 +7,4 @@ start_xterm() {
 	fi
 }
 start_xterm &
-emacs &
-firefox &
+chromium-browser &
