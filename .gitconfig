@@ -2,7 +2,7 @@
 	email = fil.eugene@gmail.com
 	name = eugenefil
 [core]
-	editor = emacs
+	editor = vim
 	pager = cat
 [alias]
 	st = status
