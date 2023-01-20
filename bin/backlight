@@ -2,14 +2,14 @@
 set -eu
 min=5
 max=100
-br_max=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+bl_dir=$(echo /sys/class/backlight/*backlight)
+read br_max <$bl_dir/max_brightness
 if [ $# -gt 0 ]; then
 	level=$1
 	[ $level -ge $min ] || level=$min
 	[ $level -le $max ] || level=$max
-	echo $((br_max * level / max)) > /sys/class/backlight/intel_backlight/brightness
+	echo $((level * br_max / max)) >$bl_dir/brightness
 else
-	br=$(cat /sys/class/backlight/intel_backlight/actual_brightness)
-	br=$(echo "$br * $max / $br_max" | bc -l)
-	printf '%.f\n' $br
+	read br <$bl_dir/actual_brightness
+	echo $((br * max / br_max))
 fi
