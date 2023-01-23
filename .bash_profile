@@ -1,16 +1,14 @@
 [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 
-[ -z "$TMUX" ] && {
-	PATH=~/bin:~/.local/bin:$PATH
+PATH=~/bin:~/.local/bin:$PATH
 
+if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
 	[ -d "$HOME/.bash_profile.d" ] && {
 		for f in "$HOME/.bash_profile.d"/*; do
 			[ -x "$f" ] && "$f"
 		done
 	}
-}
 
-if [ -z "$SSH_CONNECTION" ]; then
 	tput cvvis # block cursor mode
 	clear # clear screen
 
