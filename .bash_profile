@@ -12,8 +12,13 @@ if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
 	tput cvvis # block cursor mode
 	clear # clear screen
 
+	# get vt number
+	vt_n=$(tty)
+	vt_n=${vt_n#/dev/tty}
+	[ "$vt_n" -gt 0 ] 2>/dev/null || vt_n=
+
 	# start X, unless any key pressed
-	if [ -z "$DISPLAY" ]; then
+	if [ -n "$vt_n" ] && [ -z "$DISPLAY" ]; then
 		read -t1 -N1 -rsp 'starting X, press key to abort...' || {
 			# Note, WM must be started in background as
 			# below and xorg must replace login shell, not
@@ -32,7 +37,7 @@ if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
 			# Run raw Xorg skipping startx, xinit,
 			# Xorg.wrap. No cookie auth is used, b/c we're
 			# the only user. End session via `pkill Xorg`.
-			exec /usr/libexec/Xorg -nolisten tcp :0 vt1 -keeptty
+			exec /usr/libexec/Xorg -nolisten tcp :0 vt$vt_n -keeptty
 		}
 		echo
 	fi
