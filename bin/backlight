@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-min=5
+min=0
 max=100
 bl_dir=$(echo /sys/class/backlight/*backlight)
 read br_max <$bl_dir/max_brightness
