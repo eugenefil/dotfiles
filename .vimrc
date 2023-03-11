@@ -1,4 +1,4 @@
-colorscheme desert
+colorscheme torte
 set ignorecase smartcase
 set incsearch hlsearch
 set hidden
