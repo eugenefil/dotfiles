@@ -1,5 +1,6 @@
 XTerm*Background: black
-XTerm*Foreground: white
+XTerm*Foreground: grey
 ! for readline \e-sequences to work with Alt, Meta
 xterm*metaSendsEscape: true
 xterm*faceName: DejaVu Sans Mono:size=12
+xterm*cursorBlink: true
