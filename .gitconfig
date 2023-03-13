@@ -104,9 +104,6 @@
 
 	show-merge = "!sh -c 'merge=$(git find-merge $0 $1) && [ -n \"$merge\" ] && git show $merge'"
 
-[color]
-	ui = always
-
 # filter to filter out firefox volatile preferences like timestamps
 [filter "ff-volatile-prefs"]
 	clean = filter-ff-volatile-prefs
