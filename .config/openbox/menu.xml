@@ -3,11 +3,6 @@
 <openbox_menu xmlns="http://openbox.org/3.4/menu">
 
   <menu id="root-menu" label="Openbox 3">
-    <item label="emacs">
-      <action name="execute">
-	<command>emacs</command>
-      </action>
-    </item>
     <item label="xterm">
       <action name="execute">
 	<command>xterm</command>
@@ -27,6 +22,11 @@
       <item label="pavucontrol">
 	<action name="execute">
 	  <command>pavucontrol</command>
+	</action>
+      </item>
+      <item label="emacs">
+	<action name="execute">
+	  <command>emacs</command>
 	</action>
       </item>
     </menu>
