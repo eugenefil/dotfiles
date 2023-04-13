@@ -19,8 +19,10 @@ blinkalarm() {
 	[ -n "$brightness0" ] || return
 
 	trap 'echo "$brightness0" >"$f"; exit 1' INT TERM
-	echo $((90 * max_brightness / 100)) >"$f"; sleep 0.3
-	echo $((10 * max_brightness / 100)) >"$f"; sleep 0.3
+	for _ in `seq 4`; do
+		echo $((10 * max_brightness / 100)) >"$f"; sleep 0.1
+		echo $((90 * max_brightness / 100)) >"$f"; sleep 0.1
+	done
 	echo "$brightness0" >"$f"
 	trap - INT TERM
 }
