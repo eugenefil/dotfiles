@@ -1,0 +1,56 @@
+#!/bin/sh
+set -eu
+
+playalarm() {
+	if [ -d /dev/snd ]; then
+		aplay -q ~/alarm.wav
+	fi
+}
+
+blinkalarm() {
+	local f brightness0 max_brightness
+	for f in /sys/class/backlight/*/brightness; do
+		if [ -w "$f" ]; then
+			read brightness0 <"$f"
+			read max_brightness <"${f%/*}"/max_brightness
+			break
+		fi
+	done
+	[ -n "$brightness0" ] || return
+
+	trap 'echo "$brightness0" >"$f"; exit 1' INT TERM
+	echo $((90 * max_brightness / 100)) >"$f"; sleep 0.3
+	echo $((10 * max_brightness / 100)) >"$f"; sleep 0.3
+	echo "$brightness0" >"$f"
+	trap - INT TERM
+}
+
+doalarm() {
+	local n="${1:-1}"
+	while [ $((n--)) -gt 0 ]; do
+		playalarm
+		blinkalarm
+		sleep 1s
+	done
+}
+
+loopalarm() {
+	local n="${1:-1000}"
+	while [ $((n--)) -gt 0 ]; do
+		doalarm 5
+		sleep 1m
+	done
+}
+
+alarm() {
+	local ts=`date -d "$1" +%s`
+	while [ `date +%s` -lt $ts ]; do
+		sleep 1m
+	done
+	loopalarm 5
+}
+
+timer() { sleep "$@" && loopalarm 5; }
+
+base="${0##*/}" 
+"$base" "$@"
