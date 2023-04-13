@@ -10,6 +10,6 @@ if [ $# -gt 0 ]; then
 	[ $level -le $max ] || level=$max
 	echo $((level * br_max / max)) >$bl_dir/brightness
 else
-	read br <$bl_dir/actual_brightness
+	read br <$bl_dir/brightness
 	echo $((br * max / br_max))
 fi
