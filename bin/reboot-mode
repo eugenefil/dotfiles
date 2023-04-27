@@ -1,0 +1,13 @@
+#!/bin/sh
+
+reboot_syscall_nr=$(grep SYS_reboot /usr/include/bits/syscall.h | cut -d' ' -f3)
+python <<EOF
+import os; os.sync()
+import ctypes; ctypes.CDLL('libc.so').syscall(
+    $reboot_syscall_nr,
+    0xfee1dead,
+    0x20112000,
+    0xa1b2c3d4,
+    b"$1"
+)
+EOF
