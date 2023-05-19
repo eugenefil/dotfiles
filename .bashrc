@@ -52,4 +52,7 @@ alias apkl='apk info -L'
 alias apki='apk info'
 
 mdcd() { mkdir "$@" && { for dir; do :; done; cd "$dir"; } }
+
 fncat() { for f; do echo "$f":; cat "$f"; done }
+
+vimsession() { vim -S ~/.vim/"$1".session -i ~/.vim/"$1".viminfo; }
