@@ -87,3 +87,58 @@ ping -c1 192.168.44.1
 
 dbg "checking vpn connection"
 ping -c1 ya.ru
+exit
+
+#######################################################################
+#
+# Policy based routing (PBR)
+#
+# By default, routes are looked up from table "main" based on packet destination. PBR makes routing decisions based on rules instead, e.g. on android:
+#
+# ```sh
+# ip rule
+# 0:      from all lookup local
+# 10000:  from all fwmark 0xc0000/0xd0000 lookup legacy_system
+# 10500:  from all oif wlan0 uidrange 0-0 lookup wlan0
+# 11110:  from all iif rndis0 lookup tun0
+# 11111:  from all to 192.168.44.0/24 iif tun0 lookup tun0
+# 13000:  from all fwmark 0x10063/0x1ffff lookup local_network
+# 13000:  from all fwmark 0x1006d/0x1ffff lookup wlan0
+# 14000:  from all oif wlan0 lookup wlan0
+# 15000:  from all fwmark 0x0/0x10000 lookup legacy_system
+# 16000:  from all fwmark 0x0/0x10000 lookup legacy_network
+# 17000:  from all fwmark 0x0/0x10000 lookup local_network
+# 19000:  from all fwmark 0x6d/0x1ffff lookup wlan0
+# 22000:  from all fwmark 0x0/0xffff lookup wlan0
+# 23000:  from all fwmark 0x0/0xffff uidrange 0-0 lookup main
+# 32000:  from all unreachable
+# ```
+#
+# Each rule has priority (also called pref). 0 is the highest pref. Each rule has predicate (conditions to match) and action:
+#
+# - from - ip source prefix (`all` means don't care)
+#
+# - to - ip dest prefix, e.g. 192.168.44.0/24 from rule 11111 above
+#
+# - iif - incoming iface
+#
+# - oif - generally outgoing iface is not known - routing decides it, so this is only for outgoing sockets bound to specific iface
+#
+# - fwmark/mask - this is for matching packets marked with MARK target in netfilter [mangle table](https://www.frozentux.net/iptables-tutorial/chunkyhtml/index.html). Packet's mark is first xor'ed with fwmark and then and'ed with mask to get final value. If that value is zero, packet matches (see https://unix.stackexchange.com/questions/436799/how-the-fwmark-works-together-with-mask-in-ip-rule-command). The mask specifies what bits of fwmark must match, i.e. are important. Both fwmark and mask are 32-bit values. E.g. on android with vpn turned on, all packets coming from vpn tunnel are marked with 0x300a6 mark by `iptables -t mangle -A INPUT -i tun0 -j MARK --set-mark 0x300a6` rule and then filtered with 0x100a6/0x1ffff fwmark/mask to lookup routes in tun0 table.
+#
+# - lookup <table> action - assuming predicate match, go to table for routing decision. If routing decision is made there, rule processing stops. Otherwise, next rule is checked and so on.
+#
+# E.g. rules 11110 and 11111 were added with:
+#
+# ```sh
+#  # route packets coming from iface rndis0 using table tun0
+#  ip rule add iif rndis0 pref 11110 lookup tun0
+#
+#  # route packets coming back from vpn tunnel iface tun0 to
+#  # subnet 192.168.44.0/24 using table tun0
+#  ip rule add iif tun0 to 192.168.44.0/24 pref 11111 lookup tun0
+# ```
+#
+# To remove a rule it's enough to filter by pref:
+#
+# ip rule del pref 11111
