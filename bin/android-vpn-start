@@ -1,0 +1,89 @@
+#!/bin/sh
+set -eu
+
+me=${0##*/}
+dbg() { echo "$me: $@" >&2; }
+
+pkg=com.fast.free.unblock.secure.vpn
+
+dbg "starting adb daemon"
+sudo adb shell :
+
+dbg "enabling and starting vpn app"
+adb shell <<EOF
+set -e
+# enable vpn app, it creates tun0 iface and tunnels over wlan0
+if pm list packages -d $pkg | grep -q .; then
+	pm enable $pkg
+fi
+# start vpn app: monkey is for sending random input to apps, unlike
+# "am start", it does not need stating activity (it starts default one)
+if ! ps | grep -Fq $pkg; then
+	monkey -p $pkg 1
+fi
+EOF
+
+dbg "setting up usb ethernet link on device via android gadget"
+adb shell su <<EOF
+set -e
+cd /sys/class/android_usb/android0
+# use setsid to run in other session, otherwise pty hangs up killing
+# shell immediately after disabling gadget 
+# don't forget to keep "ffs" in functions or adb will be gone
+setsid sh -c 'echo 0 >enable; echo ffs,eem >functions; echo 1 >enable'
+EOF
+# the above necessarily breaks adb link b/c gadget was disabled
+# it creates rndis0 iface on android and usb0 on host
+
+dbg "waiting adb to re-appear"
+while ! adb shell : 2>/dev/null; do sleep 1; done
+
+dbg "setting up iface rndis0 on device"
+adb shell su <<EOF
+set -e
+ip link set rndis0 up
+ip addr add 192.168.44.1/24 dev rndis0
+# after app creates iface tun0, routing table "tun0" emerges, which
+# routes all local outgoing packets and packets coming back from tunnel
+# add route to host there, so packets from tunnel can return to host
+ip route add table tun0 192.168.44.0/24 dev rndis0
+EOF
+
+dbg "enabling forwarding and masquerading on device"
+adb shell su <<EOF
+set -e
+echo 1 >/proc/sys/net/ipv4/ip_forward
+if ! iptables -L FORWARD 1 | grep -q ^ACCEPT; then
+	iptables -I FORWARD -j ACCEPT
+fi
+
+# masquerade/nat forwarded (actually all) packets going out the tunnel
+if ! iptables -t nat -L POSTROUTING 1 | grep -q ^MASQUERADE; then
+	iptables -t nat -I POSTROUTING -o tun0 -j MASQUERADE
+fi
+
+# there's no routing rule for forwarding packets to tun0, only for
+# sending all local packets there, so by default forwarded ones will
+# end up in wlan0 table; add such routing rule for tun0
+ip rule del pref 11110 2>/dev/null || : # remove stale rule from prev runs
+ip rule add iif rndis0 pref 11110 lookup tun0 
+
+# similarly for forwarding packets from tun0
+ip rule del pref 11111 2>/dev/null || : # remove stale rule from prev runs
+ip rule add iif tun0 to 192.168.44.0/24 pref 11111 lookup tun0 
+EOF
+
+ip a
+dbg "setting up iface usb0 on the host"
+sudo ip link set usb0 up
+sudo ip addr add 192.168.44.2/24 dev usb0
+
+dbg "setting default route on host"
+sudo ip route del default 2>/dev/null || :
+sudo ip route add default via 192.168.44.1
+
+dbg "checking usb0<->rndis0 connection"
+ping -c1 192.168.44.1
+
+dbg "checking vpn connection"
+ping -c1 ya.ru
