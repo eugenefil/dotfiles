@@ -38,6 +38,9 @@ EOF
 dbg "waiting adb to re-appear"
 while ! adb shell : 2>/dev/null; do sleep 1; done
 
+dbg "waiting iface tun0 to appear on device"
+while ! adb shell ip addr show tun0 2>/dev/null; do sleep 1; done
+
 dbg "setting up iface rndis0 on device"
 adb shell su <<EOF
 set -e
@@ -73,14 +76,19 @@ ip rule del pref 11111 2>/dev/null || : # remove stale rule from prev runs
 ip rule add iif tun0 to 192.168.44.0/24 pref 11111 lookup tun0 
 EOF
 
-ip a
 dbg "setting up iface usb0 on the host"
 sudo ip link set usb0 up
 sudo ip addr add 192.168.44.2/24 dev usb0
 
-dbg "setting default route on host"
-sudo ip route del default 2>/dev/null || :
-sudo ip route add default via 192.168.44.1
+dbg "setting vpn routes and dns on host"
+# create temp table 100 for vpn routing
+sudo ip route flush table 100
+sudo ip route add table 100 default via 192.168.44.1
+# create rule for temp table that comes before main
+sudo ip rule del pref 100 2>/dev/null || :
+sudo ip rule add pref 100 lookup 100
+# replace lan dns server with global
+sudo sed -i 's/nameserver .*/nameserver 8.8.8.8/' $(readlink /etc/resolv.conf)
 
 dbg "checking usb0<->rndis0 connection"
 ping -c1 192.168.44.1
@@ -92,6 +100,8 @@ exit
 #######################################################################
 #
 # Policy based routing (PBR)
+#
+# Requires CONFIG_IP_MULTIPLE_TABLES.
 #
 # By default, routes are looked up from table "main" based on packet destination. PBR makes routing decisions based on rules instead, e.g. on android:
 #
