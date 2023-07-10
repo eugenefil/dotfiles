@@ -34,6 +34,7 @@ alias elfp='readelf -Wp'
 alias elfx='readelf -Wx'
 alias elfa='readelf -Wa'
 alias disas='objdump -d'
+alias disarm='objdump -D -b binary -m armv7'
 
 alias hex='printf "%x\n"'
 alias dec='printf "%d\n"'
