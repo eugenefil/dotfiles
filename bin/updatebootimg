@@ -1,0 +1,45 @@
+#!/bin/sh
+set -euo pipefail
+
+die()
+{
+	echo "$@" >&2
+	exit 1
+}
+
+suffixes=$(ls /boot/vmlinuz-dtb-* | grep -vF .old | sed 's_^/boot/vmlinuz-dtb__')
+[ -n "$suffixes" ] || die "there is just one kernel, call mkinitfs"
+echo "available kernel suffixes:"
+i=0
+for s in $suffixes; do
+	printf "[%d] %s\n" $((++i)) $s
+done
+choice=1
+if [ $i -gt 1 ]; then
+	echo -n "choose kernel suffix [1-$i]: "
+	read choice
+	[ "$choice" -ge 1 ] || die "incorrect choice"
+	[ "$choice" -le $i ] || die "incorrect choice"
+fi
+suffix=$(echo "$suffixes" | head -n+$choice | tail -1)
+
+dtb=$(grep ^deviceinfo_dtb= /etc/deviceinfo | cut -d\" -f2)
+base=$(grep ^deviceinfo_flash_offset_base= /etc/deviceinfo | cut -d\" -f2)
+kernel_offset=$(grep ^deviceinfo_flash_offset_kernel= /etc/deviceinfo | cut -d\" -f2)
+
+mount -o remount,rw /boot
+cd /boot
+
+# cat kernel with dtb
+mv vmlinuz-dtb"$suffix" vmlinuz-dtb"$suffix".old
+cat vmlinuz"$suffix" dtbs"$suffix"/"$dtb".dtb >vmlinuz-dtb"$suffix"
+
+# generate boot.img
+mkbootimg-osm0sis \
+	--kernel vmlinuz-dtb"$suffix" \
+	--cmdline "$(cat /proc/cmdline)" \
+	--base "$base" \
+	--kernel_offset "$kernel_offset" \
+	-o boot.img"$suffix"
+mv boot.img boot.img.old
+cp boot.img"$suffix" boot.img
