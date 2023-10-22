@@ -1,9 +1,8 @@
 #!/bin/sh
-# For a lack of a better place notes on creating an arch linux chroot
-# in alpine go here.
 
-# Creation goes as follows (taken from
+# Chroot creation for x86_64 Arch Linux goes as follows (taken from
 # https://wiki.archlinux.org/title/Install_Arch_Linux_from_existing_Linux):
+#
 # - Mount livecd iso image and 'sudo unsquashfs
 # <mountpoint>/arch/x86_64/airootfs.sfs' from it somewhere. This is
 # method B from link above, livecd has an almost ready to use system.
@@ -26,4 +25,4 @@
 
 # Run our custom arch-chroot (which see), which does additional mounts
 # or does them differently from distro's one.
-sudo arch-chroot ~/w/arch-linux
+sudo arch-chroot "$@"
