@@ -56,4 +56,4 @@ mdcd() { mkdir "$@" && { for dir; do :; done; cd "$dir"; } }
 
 fncat() { for f; do echo "$f":; cat "$f"; done }
 
-vimsession() { vim -S ~/.vim/"$1".session -i ~/.vim/"$1".viminfo; }
+vimsession() { vim -S ~/.vim/session/"$1".session -i ~/.vim/session/"$1".viminfo; }
