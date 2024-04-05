@@ -15,6 +15,8 @@ PS1='${?#0}\$ '
 # add path to executable gems to PATH
 which ruby &>/dev/null && PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
 shopt -s globstar autocd
 
 alias l='ls -al --color=auto'
