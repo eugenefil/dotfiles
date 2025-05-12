@@ -743,6 +743,10 @@
   <decor>no</decor>
   <maximized>true</maximized>
 </application>
+<application class="Alacritty">
+  <decor>no</decor>
+  <maximized>true</maximized>
+</application>
 <application class="Emacs">
   <decor>no</decor>
 </application>

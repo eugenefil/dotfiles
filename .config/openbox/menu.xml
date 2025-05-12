@@ -3,6 +3,11 @@
 <openbox_menu xmlns="http://openbox.org/3.4/menu">
 
   <menu id="root-menu" label="Openbox 3">
+    <item label="alacritty">
+      <action name="execute">
+	<command>alacritty</command>
+      </action>
+    </item>
     <item label="xterm">
       <action name="execute">
 	<command>xterm</command>
