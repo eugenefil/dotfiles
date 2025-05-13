@@ -5,34 +5,34 @@
   <menu id="root-menu" label="Openbox 3">
     <item label="alacritty">
       <action name="execute">
-	<command>alacritty</command>
+        <command>alacritty</command>
       </action>
     </item>
-    <item label="xterm">
+    <item label="chromium">
       <action name="execute">
-	<command>xterm</command>
-      </action>
-    </item>
-    <item label="firefox">
-      <action name="execute">
-	<command>firefox</command>
+        <command>chromium-browser</command>
       </action>
     </item>
     <menu id="misc-menu" label="misc">
-      <item label="chromium">
-	<action name="execute">
-	  <command>chromium-browser</command>
-	</action>
-      </item>
       <item label="pavucontrol">
-	<action name="execute">
-	  <command>pavucontrol</command>
-	</action>
+        <action name="execute">
+          <command>pavucontrol</command>
+        </action>
+      </item>
+      <item label="xterm">
+        <action name="execute">
+          <command>xterm</command>
+        </action>
+      </item>
+      <item label="firefox">
+        <action name="execute">
+          <command>firefox</command>
+        </action>
       </item>
       <item label="emacs">
-	<action name="execute">
-	  <command>emacs</command>
-	</action>
+        <action name="execute">
+          <command>emacs</command>
+        </action>
       </item>
     </menu>
     <separator />
