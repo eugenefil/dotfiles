@@ -1,4 +1,7 @@
-theme = "catppuccin_mocha"
+theme = "gruvbox"
+
+[editor]
+bufferline = "always"
 
 [editor.soft-wrap]
 enable = true
