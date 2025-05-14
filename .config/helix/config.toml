@@ -11,5 +11,11 @@ enable = true
 wrap-indicator = ""
 max-indent-retain = 0
 
+[keys.normal]
+C-c = "normal_mode"
+
 [keys.insert]
+C-c = "normal_mode"
+
+[keys.select]
 C-c = "normal_mode"
