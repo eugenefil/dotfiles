@@ -3,5 +3,8 @@ theme = "gruvbox"
 [editor]
 bufferline = "always"
 
+[editor.gutters]
+layout = ["diagnostics", "line-numbers", "diff"]
+
 [editor.soft-wrap]
 enable = true
