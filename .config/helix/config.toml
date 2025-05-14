@@ -12,7 +12,7 @@ wrap-indicator = ""
 max-indent-retain = 0
 
 [keys.normal]
-C-c = "normal_mode"
+C-c = "no_op"
 
 [keys.insert]
 C-c = "normal_mode"
