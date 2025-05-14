@@ -8,3 +8,5 @@ layout = ["diagnostics", "line-numbers", "diff"]
 
 [editor.soft-wrap]
 enable = true
+wrap-indicator = ""
+max-indent-retain = 0
