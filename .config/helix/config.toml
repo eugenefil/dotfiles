@@ -11,6 +11,11 @@ enable = true
 wrap-indicator = ""
 max-indent-retain = 0
 
+[editor.cursor-shape]
+normal = "block"
+insert = "bar"
+select = "underline"
+
 [keys.normal]
 C-c = "no_op"
 
