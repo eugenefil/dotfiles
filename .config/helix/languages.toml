@@ -1,0 +1,18 @@
+[language-server.scls]
+command = "simple-completion-language-server"
+
+[language-server.scls.config]
+max_completion_items = 10
+feature_words = true                 # enable completion by word
+feature_snippets = false              # enable snippets
+feature_unicode_input = false        # enable "unicode input"
+feature_paths = false                # enable path completion
+feature_citations = false
+
+[[language]]
+name = "rust"
+language-servers = ["scls"]
+
+[[language]]
+name = "bash"
+language-servers = ["scls"]
