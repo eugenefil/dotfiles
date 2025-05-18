@@ -3,6 +3,9 @@ theme = "papercolor-dark"
 [editor]
 bufferline = "always"
 
+[editor.statusline]
+right = ["diagnostics", "selections", "register", "position", "total-line-numbers", "file-encoding"]
+
 [editor.gutters]
 layout = ["diagnostics", "line-numbers", "diff"]
 
