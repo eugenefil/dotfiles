@@ -1,4 +1,4 @@
-theme = "gruvbox"
+theme = "papercolor-dark"
 
 [editor]
 bufferline = "always"
