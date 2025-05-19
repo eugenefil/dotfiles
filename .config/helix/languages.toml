@@ -16,3 +16,7 @@ language-servers = ["scls"]
 [[language]]
 name = "bash"
 language-servers = ["scls"]
+
+[[language]]
+name = "markdown"
+language-servers = ["scls"]
