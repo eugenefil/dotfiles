@@ -16,6 +16,7 @@ language-servers = ["scls"]
 [[language]]
 name = "bash"
 language-servers = ["scls"]
+indent = { unit = "    ", tab-width = 4 }
 
 [[language]]
 name = "markdown"
