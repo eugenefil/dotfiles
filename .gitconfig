@@ -107,3 +107,5 @@
 # filter to filter out firefox volatile preferences like timestamps
 [filter "ff-volatile-prefs"]
 	clean = filter-ff-volatile-prefs
+[init]
+	defaultBranch = main
