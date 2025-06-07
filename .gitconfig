@@ -2,7 +2,7 @@
 	email = fil.eugene@gmail.com
 	name = Evgeniy Filimonov
 [core]
-	editor = vim
+	editor = hx
 	pager = cat
 [alias]
 	st = status
