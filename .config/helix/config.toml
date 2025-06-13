@@ -13,6 +13,7 @@ layout = ["diagnostics", "line-numbers", "diff"]
 enable = true
 wrap-indicator = ""
 max-indent-retain = 0
+max-wrap = 0
 
 [editor.cursor-shape]
 normal = "block"
