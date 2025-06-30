@@ -12,9 +12,6 @@ shopt -s histappend
 export EDITOR=vim
 PS1='${?#0}\$ '
 
-# add path to executable gems to PATH
-which ruby &>/dev/null && PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 shopt -s globstar autocd
@@ -53,6 +50,8 @@ alias rmrf='rm -rf'
 
 alias apkl='apk info -L'
 alias apki='apk info'
+
+alias hx=helix
 
 mdcd() { mkdir "$@" && { for dir; do :; done; cd "$dir"; } }
 

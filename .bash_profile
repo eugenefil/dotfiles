@@ -37,7 +37,11 @@ if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
 			# Run raw Xorg skipping startx, xinit,
 			# Xorg.wrap. No cookie auth is used, b/c we're
 			# the only user. End session via `pkill Xorg`.
-			exec /usr/libexec/Xorg -nolisten tcp :0 vt$vt_n -keeptty
+			for xorg in /usr/lib/Xorg /usr/libexec/Xorg; do
+				if [ -x $xorg ]; then
+					exec $xorg -nolisten tcp :0 vt$vt_n -keeptty
+				fi
+			done
 		}
 		echo
 	fi
