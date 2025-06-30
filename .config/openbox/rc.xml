@@ -739,20 +739,23 @@
 
   # end of the example
 -->
-<application class="XTerm">
-  <decor>no</decor>
-  <maximized>true</maximized>
-</application>
-<application class="Alacritty">
-  <decor>no</decor>
-  <maximized>true</maximized>
-</application>
-<application class="Emacs">
-  <decor>no</decor>
-</application>
-<application class="firefox">
-  <decor>no</decor>
-</application>
+
+<!-- mobile setup: no decor, maximized
+  <application class="XTerm">
+    <decor>no</decor>
+    <maximized>true</maximized>
+  </application>
+  <application class="Alacritty">
+    <decor>no</decor>
+    <maximized>true</maximized>
+  </application>
+  <application class="Emacs">
+    <decor>no</decor>
+  </application>
+  <application class="firefox">
+    <decor>no</decor>
+  </application>
+-->
 
 </applications>
 

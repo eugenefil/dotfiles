@@ -10,7 +10,7 @@
     </item>
     <item label="chromium">
       <action name="execute">
-        <command>chromium-browser</command>
+        <command>chromium</command>
       </action>
     </item>
     <menu id="misc-menu" label="misc">
@@ -27,6 +27,11 @@
       <item label="firefox">
         <action name="execute">
           <command>firefox</command>
+        </action>
+      </item>
+      <item label="chromium (alpine)">
+        <action name="execute">
+          <command>chromium-browser</command>
         </action>
       </item>
       <item label="emacs">
