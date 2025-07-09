@@ -11,7 +11,7 @@ feature_citations = false
 
 [[language]]
 name = "rust"
-language-servers = ["scls"]
+language-servers = ["scls", "rust-analyzer"]
 
 [[language]]
 name = "bash"
