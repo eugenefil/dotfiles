@@ -2,6 +2,7 @@ theme = "papercolor-dark"
 
 [editor]
 bufferline = "always"
+auto-format = false # disable auto-formatting on save
 
 [editor.statusline]
 right = ["diagnostics", "selections", "register", "position", "total-line-numbers", "file-encoding"]
