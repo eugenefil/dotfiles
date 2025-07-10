@@ -2,8 +2,7 @@
 	email = fil.eugene@gmail.com
 	name = Evgeniy Filimonov
 [core]
-	editor = hx
-	pager = cat
+	editor = helix
 [alias]
 	st = status
 	ci = commit
