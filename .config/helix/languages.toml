@@ -21,3 +21,7 @@ indent = { unit = "    ", tab-width = 4 }
 [[language]]
 name = "markdown"
 language-servers = ["scls"]
+
+[[language]]
+name = "git-commit"
+language-servers = ["scls"]
