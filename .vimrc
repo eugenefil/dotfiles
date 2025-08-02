@@ -8,4 +8,4 @@ set sidescroll=1
 set dir=~/.vim/swap//
 runtime ftplugin/man.vim
 let g:markdown_folding = 1
-let g:markdown_fenced_languages = ['sh', 'make', 'c', 'cpp', 'rust']
+let g:markdown_fenced_languages = ['sh', 'make', 'c', 'cpp', 'rust', 'dart']
