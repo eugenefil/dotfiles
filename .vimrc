@@ -1,4 +1,5 @@
 filetype plugin on
+syntax on
 colorscheme torte
 set ignorecase smartcase
 set incsearch hlsearch
