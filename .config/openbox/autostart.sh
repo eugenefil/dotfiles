@@ -5,7 +5,7 @@ start_terminal()
 }
 start_terminal &
 
-for browser in chromium chromium-browser; do
+for browser in firefox chromium chromium-browser; do
 	if command -v $browser >/dev/null; then
 		$browser &
 		break
