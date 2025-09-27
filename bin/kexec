@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+set -e
+mount -r UUID=ff31db18-af76-4bac-8051-e0e13c11e1a1 /mnt
+
+# Note: To load nvidia driver in the destination kernel, both nvidia and nouveau
+# drivers should be blacklisted in the bootstrap kernel. Otherwise, nvidia won't
+# init properly. Installing nvidia in the bootstrap kernel blacklists nouveau.
+# nvidia itself should be blacklisted via kernel param:
+#
+# module_blacklist=nvidia
+
+kexec -l /mnt/boot/vmlinuz-linux --initrd=/mnt/boot/initramfs-linux.img --command-line="root=UUID=ff31db18-af76-4bac-8051-e0e13c11e1a1 rw loglevel=3 quiet nvidia-drm.modeset=1"
+systemctl kexec
