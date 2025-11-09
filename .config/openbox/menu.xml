@@ -8,6 +8,11 @@
         <command>alacritty</command>
       </action>
     </item>
+    <item label="firefox">
+      <action name="execute">
+        <command>firefox</command>
+      </action>
+    </item>
     <item label="chromium">
       <action name="execute">
         <command>chromium</command>
@@ -22,11 +27,6 @@
       <item label="xterm">
         <action name="execute">
           <command>xterm</command>
-        </action>
-      </item>
-      <item label="firefox">
-        <action name="execute">
-          <command>firefox</command>
         </action>
       </item>
       <item label="chromium (alpine)">
