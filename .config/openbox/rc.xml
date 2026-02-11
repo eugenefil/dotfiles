@@ -305,6 +305,11 @@
       <command>kfmclient openProfile filemanagement</command>
     </action>
   </keybind>
+  <keybind key="Scroll_Lock">
+    <action name="Execute">
+      <command>~/bin/nerd-dictation-toggle</command>
+    </action>
+  </keybind>
 
   <keybind key="C-Escape">
     <action name="ShowMenu"><menu>root-menu</menu></action>

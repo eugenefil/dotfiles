@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Path to the activity flag
+FLAG="/tmp/nerd-dictation-active"
+
+if [ -f "$FLAG" ]; then
+    # Stop dictation session gracefully
+    nerd-dictation end
+
+    # Turn off LED and remove flag
+    xset -led named "Scroll Lock"
+    rm -f "$FLAG"
+else
+    # Use built-in dotoolc support for kernel-level input
+    # This avoids xorg keymap problems where dvorak is output as qwerty
+    nerd-dictation begin --simulate-input-tool=DOTOOLC &
+
+    # Turn on LED and create flag
+    xset led named "Scroll Lock"
+    touch "$FLAG"
+fi
