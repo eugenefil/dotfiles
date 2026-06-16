@@ -9,7 +9,7 @@ HISTFILESIZE=10000
 HISTSIZE=10000
 shopt -s histappend
 
-export EDITOR=vim
+export EDITOR=helix
 PS1='${?#0}\$ '
 
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
