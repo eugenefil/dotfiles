@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+PROXY_FILE="$HOME/.config/io.datasette.llm/proxy"
+if [[ -z "${HTTPS_PROXY:-}" && -r "$PROXY_FILE" ]]; then
+    HTTPS_PROXY="$(<"$PROXY_FILE")"
+    export HTTPS_PROXY
+fi
+
+SEP='--------------------------------------------------------------------------------'
+output() {
+    local input
+    input="$(cat)"
+    printf "\n$SEP\n\n**Prompt**:\n\n%s\n\n$SEP\n\n**Reply**:\n\n" "$input"
+    printf '%s' "$input" | llm "$@" 2>&1
+    # Add one sep for the streaming markdown renderer which doesn't output the very last block so we
+    # give it an extra dummy. Add another sep for the pager which stops at penultimate block when
+    # jumping to the end of output. In total, we need 2 extra seps which also is a visual cue.
+    printf "\n$SEP\n\n$SEP\n"
+}
+
+output "$@" | tee >(nc -c 127.0.0.1 9000 &>/dev/null || cat >/dev/null)
+wait # wait for nc redirection to finish
